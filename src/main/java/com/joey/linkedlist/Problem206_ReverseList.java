@@ -8,6 +8,14 @@ package com.joey.linkedlist;
 public class Problem206_ReverseList {
 
     public static ListNode reverseList(ListNode head) {
-        return null;
+        if (head == null) return null;
+        ListNode pre = null, next;
+        while (head != null) {
+            next = head.next;
+            head.next = pre;
+            pre = head;
+            head = next;
+        }
+        return pre;
     }
 }
