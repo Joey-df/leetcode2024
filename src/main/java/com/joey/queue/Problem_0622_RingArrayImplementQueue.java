@@ -18,7 +18,7 @@ package com.joey.queue;
 //deQueue(): 从循环队列中删除一个元素。如果成功删除则返回真。
 //isEmpty(): 检查循环队列是否为空。
 //isFull(): 检查循环队列是否已满。
-public class Problem622_RingArrayImplementQueue {
+public class Problem_0622_RingArrayImplementQueue {
 
     class MyCircularQueue {
 

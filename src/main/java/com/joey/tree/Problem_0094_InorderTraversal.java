@@ -10,7 +10,7 @@ import java.util.Stack;
 
 // 94. 用一个栈完成中序遍历
 // 测试链接 : https://leetcode.cn/problems/binary-tree-inorder-traversal/
-public class Problem94_InorderTraversal {
+public class Problem_0094_InorderTraversal {
 
     // 0.用栈
     // 1.先压入整个树 的左边界，直至指针到null

@@ -1,7 +1,6 @@
 package com.joey.stack;
 
 import java.util.LinkedList;
-import java.util.Queue;
 
 /**
  * @author pei.liu
@@ -9,7 +8,7 @@ import java.util.Queue;
 
 //225. 用队列实现栈
 //https://leetcode.cn/problems/implement-stack-using-queues/description/
-public class Problem225_ImplementStackUsingQueues {
+public class Problem_0225_ImplementStackUsingQueues {
 
     class MyStack {
 

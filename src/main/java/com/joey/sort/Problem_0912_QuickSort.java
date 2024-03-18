@@ -6,7 +6,7 @@ package com.joey.sort;
 
 //912. 排序数组
 //https://leetcode.cn/problems/sort-an-array/description/
-public class Problem912_QuickSort {
+public class Problem_0912_QuickSort {
 
     public int[] sortArray(int[] nums) {
         if (nums == null || nums.length < 2) return nums;

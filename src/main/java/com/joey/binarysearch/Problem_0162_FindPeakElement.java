@@ -6,7 +6,7 @@ package com.joey.binarysearch;
 
 //162. 寻找峰值
 //给你一个相邻不等的整数数组 nums，找到峰值元素并返回其索引。数组可能包含多个峰值，在这种情况下，返回 任何一个峰值 所在位置即可。
-public class Problem162_FindPeakElement {
+public class Problem_0162_FindPeakElement {
 
     public static int findPeakElement(int[] arr) {
         if (arr == null || arr.length == 0) return -1;

@@ -8,7 +8,7 @@ import java.util.Stack;
 
 //232. 用栈实现队列
 //https://leetcode.cn/problems/implement-queue-using-stacks/description/
-public class Problem232_ImplementQueueUsingStacks {
+public class Problem_0232_ImplementQueueUsingStacks {
 
     class MyQueue {
 

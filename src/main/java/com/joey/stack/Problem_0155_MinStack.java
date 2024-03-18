@@ -5,7 +5,7 @@ import java.util.Stack;
 /**
  * @author pei.liu
  */
-public class Problem155_MinStack {
+public class Problem_0155_MinStack {
 
     class MinStack {
 

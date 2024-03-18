@@ -6,7 +6,7 @@ package com.joey.queue;
 
 
 //641. 设计循环双端队列
-public class Problem641_MyCircularDeque {
+public class Problem_0641_MyCircularDeque {
 
     class MyCircularDeque {
 

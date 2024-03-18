@@ -14,7 +14,7 @@ package com.joey.linkedlist;
 //示例 2：
 //输入：head = [2,1], x = 2
 //输出：[1,2]
-public class Problem86_PartitionList {
+public class Problem_0086_PartitionList {
 
     public static ListNode partition(ListNode head, int x) {
         if (head == null) return head;
