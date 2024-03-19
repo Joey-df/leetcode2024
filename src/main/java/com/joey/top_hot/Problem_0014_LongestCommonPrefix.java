@@ -20,8 +20,20 @@ package com.joey.top_hot;
  */
 public class Problem_0014_LongestCommonPrefix {
 
-    public static String longestCommonPrefix(String[] strs) {
-
+    public static String longestCommonPrefix(String[] arr) {
+        if (arr == null || arr.length == 0) return "";
+        String first = arr[0];
+        int minIndex = first.length();
+        for (int i = 1; i < arr.length; i++) {
+            int curIndex = 0;
+            String cur = arr[i];
+            while (curIndex < first.length() && curIndex < cur.length()
+                    && cur.charAt(curIndex) == first.charAt(curIndex))
+                curIndex++;
+            if (curIndex == 0) return "";
+            minIndex = Math.min(minIndex, curIndex);
+        }
+        return first.substring(0, minIndex);
     }
 
 

@@ -9,6 +9,18 @@ package com.joey.top_hot;
 public class Problem_0011_ContainerWithMostWater {
 
     public static int maxArea(int[] height) {
-
+        if (height == null || height.length < 2) return 0;
+        int l = 0, r = height.length - 1;
+        int ans = 0;
+        while (l < r) {
+            if (height[l] < height[r]) {
+                ans = Math.max(ans, height[l] * (r - l));
+                l++;
+            } else {
+                ans = Math.max(ans, height[r] * (r - l));
+                r--;
+            }
+        }
+        return ans;
     }
 }

@@ -19,9 +19,41 @@ package com.joey.top_hot;
  */
 public class Problem_0034_FindFirstAndLastPositionOfElementInSortedArray {
 
-    public static int[] searchRange(int[] nums, int target) {
-
+    public int[] searchRange(int[] nums, int target) {
+        if (nums == null || nums.length == 0) return new int[]{-1, -1};
+        return new int[]{
+                findLeft(nums, target),
+                findRight(nums, target)
+        };
     }
 
 
+    public int findLeft(int[] arr, int target) {
+        int l = 0, r = arr.length - 1, m;
+        int ans = -1;
+        while (l <= r) {
+            m = l + ((r - l) >> 1);
+            if (arr[m] > target) r = m - 1;
+            else if (arr[m] < target) l = m + 1;
+            else {
+                ans = m;
+                r = m - 1;
+            }
+        }
+        return ans;
+    }
+
+    public int findRight(int[] arr, int target) {
+        int l = 0, r = arr.length - 1, m, ans = -1;
+        while (l <= r) {
+            m = l + ((r - l) >> 1);
+            if (arr[m] > target) r = m - 1;
+            else if (arr[m] < target) l = m + 1;
+            else {
+                ans = m;
+                l = m + 1;
+            }
+        }
+        return ans;
+    }
 }

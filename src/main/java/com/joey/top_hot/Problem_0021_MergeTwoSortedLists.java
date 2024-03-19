@@ -15,8 +15,35 @@ package com.joey.top_hot;
 // 分别使用递归和迭代实现
 public class Problem_0021_MergeTwoSortedLists {
 
-    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+    public ListNode mergeTwoLists(ListNode h1, ListNode h2) {
+        if (h1 == null || h2 == null) return h1 == null ? h2 : h1;
+        ListNode dummy = new ListNode(-1);
+        ListNode cur = dummy;
+        ListNode cur1 = h1, cur2 = h2;
+        while (cur1 != null && cur2 != null) {
+            if (cur1.val <= cur2.val) {
+                cur.next = cur1;
+                cur1 = cur1.next;
+            } else {
+                cur.next = cur2;
+                cur2 = cur2.next;
+            }
+            cur = cur.next;
+        }
+        if (cur1 != null) cur.next = cur1;
+        if (cur2 != null) cur.next = cur2;
+        return dummy.next;
     }
 
+
+    public ListNode mergeTwoLists2(ListNode h1, ListNode h2) {
+        if (h1 == null || h2 == null) return h1 == null ? h2 : h1;
+        if (h1.val <= h2.val) {
+            h1.next = mergeTwoLists2(h1.next, h2);
+            return h1;
+        }
+        h2.next = mergeTwoLists2(h2.next, h1);
+        return h2;
+    }
 
 }

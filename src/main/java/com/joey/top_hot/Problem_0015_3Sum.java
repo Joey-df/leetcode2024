@@ -2,6 +2,7 @@ package com.joey.top_hot;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -20,31 +21,36 @@ import java.util.List;
  */
 public class Problem_0015_3Sum {
 
-    //给定数组nums
-    //返回 从start开始到N-1范围上 所有和为target的二元组
-    public static List<List<Integer>> twoSum(int[] nums, int start, int target) {
+    public List<List<Integer>> threeSum(int[] arr) {
         List<List<Integer>> ans = new ArrayList<>();
-        if (nums == null || nums.length == 0) {
-            return ans;
+        if (arr == null || arr.length < 3) return ans;
+        Arrays.sort(arr);
+        for (int i = 0; i < arr.length - 2; i++) {
+            if (i > 0 && arr[i] == arr[i - 1]) continue;
+            List<List<Integer>> twoSum = twoSum(arr, i + 1, arr.length - 1, -arr[i]);
+            for (List<Integer> cur : twoSum) {
+                cur.add(0, arr[i]);
+                ans.add(cur);
+            }
         }
-        // [-1,0,1,2,-1,-4]，target=1
-        // [-4,-1,-1,0,1,2]
-        // 返回[-1,2],[0,1]
-        Arrays.sort(nums);
+        return ans;
+    }
 
-        int l = start;
-        int r = nums.length - 1;
+    //arr已有序
+    //返回arr[l,r]范围上累加和等于target的所有不重复的二元组
+    private List<List<Integer>> twoSum(int[] arr, int l, int r, int target) {
+        List<List<Integer>> ans = new ArrayList<>();
+        if (arr == null || arr.length < 2 || l >= r) return ans;
+        int start = l;
         while (l < r) {
-            if (nums[l] + nums[r] > target) {
-                r--;
-            } else if (nums[l] + nums[r] < target) {
-                l++;
-            } else { // ==
-                if (l == start || nums[l] != nums[l - 1]) {
-                    ArrayList<Integer> sub = new ArrayList<>();
-                    sub.add(nums[l]);
-                    sub.add(nums[r]);
-                    ans.add(sub);
+            if (arr[l] + arr[r] < target) l++;
+            else if (arr[l] + arr[r] > target) r--;
+            else {
+                if (l == start || arr[l] != arr[l - 1]) {
+                    List<Integer> cur = new ArrayList<>();
+                    cur.add(arr[l]);
+                    cur.add(arr[r]);
+                    ans.add(cur);
                 }
                 l++;
             }
@@ -52,53 +58,5 @@ public class Problem_0015_3Sum {
         return ans;
     }
 
-    //返回nums[start,N-1]范围上累加和为target的三元组
-    public static List<List<Integer>> threeSum(int[] nums, int start, int target) {
-        List<List<Integer>> ans = new ArrayList<>();
-        if (nums == null || nums.length == 0) {
-            return ans;
-        }
-        Arrays.sort(nums);
-        // [-4,-1,-1,0,1,2]
-        for (int i = start; i <= nums.length - 3; i++) {
-            if (i > start && nums[i] == nums[i - 1]) {
-                continue;
-            }
-            List<List<Integer>> twoSum = twoSum(nums, i + 1, target - nums[i]);
-            for (List<Integer> list : twoSum) {
-                list.add(nums[i]);
-                ans.add(list);
-            }
-        }
-        return ans;
-    }
-
-    //返回nums[start,N-1]范围上累加和为target的4元组
-    public static List<List<Integer>> fourSum(int[] nums, int start, int target) {
-        List<List<Integer>> ans = new ArrayList<>();
-        if (nums == null || nums.length == 0) {
-            return ans;
-        }
-        Arrays.sort(nums);
-        //[-4,-1,-1,0,1,2]
-        for (int i = start; i <= nums.length - 4; i++) {
-            if (i != start && nums[i] == nums[i - 1]) {
-                continue;
-            }
-            List<List<Integer>> threeSum = threeSum(nums, i + 1, target - nums[i]);
-            for (List<Integer> list : threeSum) {
-                list.add(nums[i]);
-                ans.add(list);
-            }
-        }
-        return ans;
-    }
-
-    public static void main(String[] args) {
-        int[] nums = new int[]{-4, -1, -1, 0, 1, 2};
-        int target = 0;
-        List<List<Integer>> lists = threeSum(nums, 0, target);
-        System.out.println(lists);
-    }
 
 }

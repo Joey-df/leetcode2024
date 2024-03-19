@@ -19,7 +19,14 @@ package com.joey.top_hot;
  */
 public class Problem_0026_RemoveDuplicatesFromSortedArray {
 
-    public static int removeDuplicates(int[] nums) {
-
+    public static int removeDuplicates(int[] arr) {
+        if (arr == null || arr.length == 0) return 0;
+        int done = 0;
+        for (int i = 1; i < arr.length; i++) {
+            if (arr[i] != arr[done]) {
+                arr[++done] = arr[i];
+            }
+        }
+        return done + 1;
     }
 }

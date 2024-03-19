@@ -1,7 +1,5 @@
 package com.joey.top_hot;
 
-import linked_list.ListNode;
-
 import java.util.PriorityQueue;
 
 /**
@@ -34,6 +32,27 @@ import java.util.PriorityQueue;
 public class Problem_0023_MergeKSortedLists {
 
     public static ListNode mergeKLists(ListNode[] lists) {
-
+        if (lists == null || lists.length == 0) return null;
+        PriorityQueue<ListNode> q = new PriorityQueue<>((a, b) -> a.val - b.val);
+        //把每个小链表的头节点都放进去
+        for (ListNode head : lists) {
+            if (head != null)
+                q.add(head);
+        }
+        if (q.isEmpty()) return null; // 处理[]、[[]]、[[],[]]等情况
+        ListNode head = q.poll();
+        if (head.next != null) {
+            q.add(head.next); // 弹一个就加一个
+        }
+        ListNode cur = head;
+        while (!q.isEmpty()) {
+            ListNode node = q.poll();
+            cur.next = node;
+            cur = cur.next;
+            if (node.next != null) {// 弹一个就加一个
+                q.add(node.next);
+            }
+        }
+        return head;
     }
 }
