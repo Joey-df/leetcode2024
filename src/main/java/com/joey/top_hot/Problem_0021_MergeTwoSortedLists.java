@@ -18,8 +18,7 @@ public class Problem_0021_MergeTwoSortedLists {
     public ListNode mergeTwoLists(ListNode h1, ListNode h2) {
         if (h1 == null || h2 == null) return h1 == null ? h2 : h1;
         ListNode dummy = new ListNode(-1);
-        ListNode cur = dummy;
-        ListNode cur1 = h1, cur2 = h2;
+        ListNode cur = dummy, cur1 = h1, cur2 = h2;
         while (cur1 != null && cur2 != null) {
             if (cur1.val <= cur2.val) {
                 cur.next = cur1;
