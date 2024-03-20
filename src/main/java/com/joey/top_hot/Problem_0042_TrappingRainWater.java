@@ -8,43 +8,24 @@ package com.joey.top_hot;
  */
 public class Problem_0042_TrappingRainWater {
 
-    public static int trap(int[] arr) {
-
-        if (arr == null || arr.length < 3) {
-            return 0;
+    // 预处理数组：先依次生成左边的最大值，右边的最大值数组，两个数组
+    // 撸一遍结算答案
+    public int trap(int[] arr) {
+        if (arr == null || arr.length < 3) return 0;
+        int n = arr.length;
+        int[] maxLeft = new int[n];
+        int[] maxRight = new int[n];
+        for (int i = 0; i < n; i++) {
+            maxLeft[i] = i == 0 ? arr[i] : (Math.max(arr[i], maxLeft[i - 1]));
         }
-        int N = arr.length;
-        int[] leftMax = new int[N];
-        int lm = arr[0];
-        for (int i = 0; i < N; i++) {
-            lm = Math.max(lm, arr[i]);
-            leftMax[i] = lm;
+        for (int i = n - 1; i >= 0; i--) {
+            maxRight[i] = i == n - 1 ? arr[n - 1] : (Math.max(arr[i], maxRight[i + 1]));
         }
-        int[] rightMax = new int[N];
-        int rm = arr[N - 1];
-        for (int i = N - 1; i >= 0; i--) {
-            rm = Math.max(rm, arr[i]);
-            rightMax[i] = rm;
-        }
-        //print(leftMax);
-        //print(rightMax);
+        //collect ans
         int ans = 0;
-        for (int i = 1; i < N - 1; i++) {
-            ans += Math.max((Math.min(leftMax[i], rightMax[i]) - arr[i]), 0);
+        for (int i = 1; i < n - 1; i++) {
+            ans += Math.max(0, Math.min(maxLeft[i], maxRight[i]) - arr[i]);
         }
         return ans;
-    }
-
-
-    private static void print(int[] arr) {
-        for (int i = 0; i < arr.length; i++) {
-            System.out.print(arr[i] + " ");
-        }
-        System.out.println();
-    }
-
-    public static void main(String[] args) {
-        int[] arr = new int[]{3, 1, 2, 5, 2, 4};
-        System.out.println(trap(arr));
     }
 }
