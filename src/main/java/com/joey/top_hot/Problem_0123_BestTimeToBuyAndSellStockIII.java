@@ -8,8 +8,19 @@ package com.joey.top_hot;
  */
 public class Problem_0123_BestTimeToBuyAndSellStockIII {
 
-//    public int maxProfit(int[] prices) {
-//
-//    }
+    public int maxProfit(int[] prices) {
+        if (prices == null || prices.length < 2) return 0;
+        int onceDoneMinusBuyMax = -prices[0]; // 做完一笔交易并且完成第二次买入的最大化收益
+        int min = prices[0]; // 为了更新onceDoneMax
+        int onceDoneMax = 0; // 做完一笔交易的最大收益
+        int ans = 0;
+        for (int i = 1; i < prices.length; i++) {
+            onceDoneMax = Math.max(onceDoneMax, prices[i] - min);
+            min = Math.min(min, prices[i]); // update min
+            ans = Math.max(ans, onceDoneMinusBuyMax + prices[i]);
+            onceDoneMinusBuyMax = Math.max(onceDoneMinusBuyMax, onceDoneMax - prices[i]);
+        }
+        return ans;
+    }
 
 }

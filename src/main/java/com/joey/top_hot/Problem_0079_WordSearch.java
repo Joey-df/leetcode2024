@@ -16,11 +16,11 @@ package com.joey.top_hot;
  */
 public class Problem_0079_WordSearch {
 
-    public static boolean exist(char[][] board, String word) {
-        char[] w = word.toCharArray();
+    public boolean exist(char[][] board, String word) {
+        if (board == null || board.length == 0 || board[0].length == 0) return false;
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[0].length; j++) {
-                if (func(board, i, j, w, 0)) {
+                if (fun(board, i, j, word.toCharArray(), 0)) {
                     return true;
                 }
             }
@@ -28,29 +28,23 @@ public class Problem_0079_WordSearch {
         return false;
     }
 
-    //递归含义
-    //m为固定输入矩阵
-    //从(r,c)位置开始，能否走出word[k...]
-    //word[0...k-1]已经搞定了，不用操心了！
-    private static boolean func(char[][] m, int row, int col, char[] word, int k) {
-        if (k == word.length) {
-            //表示[0...word.length-1]已经搞定了
-            return true;
-        }
-        if (row < 0 || row >= m.length || col < 0 || col >= m[0].length) {
-            return false;
-        }
-        if (m[row][col] != word[k]) {
-            return false;
-        }
 
-        m[row][col] = '.';
-        // 走后续
-        boolean can = func(m, row - 1, col, word, k + 1) ||
-                func(m, row + 1, col, word, k + 1) ||
-                func(m, row, col - 1, word, k + 1) ||
-                func(m, row, col + 1, word, k + 1);
-        m[row][col] = word[k];
-        return can;
+    //递归含义：
+    //从(i,j)出发能不能走出word[k...]，word[...k-1]都不用再考虑了
+    private boolean fun(char[][] board, int i, int j, char[] word, int k) {
+        if (k == word.length) return true;
+        if (i < 0 || i >= board.length || j < 0 || j >= board[0].length) return false;
+        //(i,j)不越界
+        if (board[i][j] != word[k]) return false;
+        // board[i][j] == word[k]
+        char c = board[i][j];
+        board[i][j] = '0';
+        boolean ans = fun(board, i - 1, j, word, k + 1) ||
+                fun(board, i + 1, j, word, k + 1) ||
+                fun(board, i, j - 1, word, k + 1) ||
+                fun(board, i, j + 1, word, k + 1);
+        board[i][j] = c; //恢复
+        return ans;
     }
+
 }

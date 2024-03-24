@@ -1,7 +1,5 @@
 package com.joey.top_hot;
 
-import linked_list.ListNode;
-
 /**
  * 141. 环形链表
  * 给定一个链表，判断链表中是否有环。
@@ -10,15 +8,10 @@ import linked_list.ListNode;
 public class Problem_0141_LinkedListCycle {
 
     public boolean hasCycle(ListNode head) {
-        if (head==null || head.next==null) {
-            return false;
-        }
-        ListNode s = head.next;
-        ListNode f = head.next.next;
-        while (s!=f) {
-            if(f==null || f.next==null) {
-                return false;
-            }
+        if (head == null || head.next == null) return false;
+        ListNode s = head.next, f = head.next.next;
+        while (s != f) {
+            if (f == null || f.next == null) return false;
             s = s.next;
             f = f.next.next;
         }

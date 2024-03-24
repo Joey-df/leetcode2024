@@ -41,22 +41,18 @@ public class Problem_0116_PopulatingNextRightPointersInEachNode {
         }
     }
 
-    public static Node connect(Node root) {
-        if (root==null) return null;
+    public Node connect(Node root) {
+        if (root == null) return null;
         LinkedList<Node> q = new LinkedList<>();
-        q.offerLast(root);
-        while(!q.isEmpty()) {
-            int size = q.size();
-            while(size > 0) {
-                Node cur = q.pollFirst();
-                if (size==1) {
-                    cur.next = null;
-                } else {
-                    cur.next = q.peek();
-                }
-                if (cur.left!=null) q.offerLast(cur.left);
-                if (cur.right!=null) q.offerLast(cur.right);
-                size--;
+        q.offer(root);
+        int size;
+        while (!q.isEmpty()) {
+            size = q.size();
+            for (int i = 0; i < size; i++) {
+                Node node = q.pollFirst();
+                node.next = i == size - 1 ? null : q.peekFirst();
+                if (node.left != null) q.offerLast(node.left);
+                if (node.right != null) q.offerLast(node.right);
             }
         }
         return root;

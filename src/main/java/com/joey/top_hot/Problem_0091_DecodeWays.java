@@ -30,62 +30,48 @@ package com.joey.top_hot;
  */
 public class Problem_0091_DecodeWays {
 
-    public static int numDecodings(String s) {
-        if (s == null || s.length() == 0) {
-            return 0;
-        }
-        char[] str = s.toCharArray();
-        return func(str, 0);
+    public int numDecodings(String s) {
+        if (s == null || s.length() == 0) return 0;
+        return fun(s.toCharArray(), 0);
     }
 
     //递归含义
-    //str输入固定参数 如"226"对应的char[]
-    //str[0...index-1]已经搞定了，不用操心了！
-    //str[index...]解码的方法数，返回
-    private static int func(char[] str, int index) {
+    //str[0,index-1]已经搞定了不用再操心了，str[index...]有多少中解码方法返回
+    private int fun(char[] str, int index) {
         if (index == str.length) {
-            //表示str[0...str.length-1]已经搞定了，此时代表一种方法数
             return 1;
         }
-        //index还有字符
-        if (str[index] == '0') {
-            return 0;//当前位置面对0字符是不可以的
-        }
-        //str[index] -> '1'~'9'
-        int ways = func(str, index + 1);// str[index]独立转
-        if (index + 1 < str.length) { //index+1位置还有字符
+        //index位置还有字符
+        if (str[index] == '0') return 0; // 不能让index位置单独面对0字符
+        // str[index] != '0'
+        // 1) str[index]单转
+        int ans = fun(str, index + 1);
+        // 2) index index+1一起转
+        if (index + 1 < str.length) {
             int num = (str[index] - '0') * 10 + (str[index + 1] - '0');
             if (num <= 26) {
-                ways += func(str, index + 2);//str[index]与str[index+1]组合转
+                ans += fun(str, index + 2);
             }
         }
-        return ways;
+        return ans;
     }
 
-    //改动态规划
-    private static int dp(char[] str) {
-        int N = str.length;
-        int[] dp = new int[N + 1];
-        dp[N] = 1;
-        for (int i = N - 1; i >= 0; i--) {
+    //dp
+    private int numDecodings2(String s) {
+        if (s == null || s.length() == 0) return 0;
+        char[] str = s.toCharArray();
+        int n = str.length;
+        int[] dp = new int[n + 1];
+        dp[n] = 1;
+        for (int i = n - 1; i >= 0; i--) {
             if (str[i] != '0') {
-                //str[i] -> '1'~'9'
-                dp[i] = dp[i + 1];// str[i]独立转
-                if (i + 1 < str.length) { //i+1位置还有字符
-                    int num = (str[i] - '0') * 10 + (str[i + 1] - '0');
-                    if (num <= 26) {
-                        dp[i] += dp[i + 2];//str[index]与str[index+1]组合转
-                    }
+                dp[i] = dp[i + 1];
+                if (i + 1 < n && (str[i] - '0') * 10 + (str[i + 1] - '0') <= 26) {
+                    dp[i] += dp[i + 2];
                 }
             }
         }
         return dp[0];
     }
 
-
-    public static void main(String[] args) {
-        String s = "111111111111111111111111111111111";
-        System.out.println(dp(s.toCharArray()));
-        System.out.println(numDecodings(s));
-    }
 }

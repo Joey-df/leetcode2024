@@ -1,7 +1,5 @@
 package com.joey.top_hot;
 
-import tree.TreeNode;
-
 /**
  * 104. 二叉树的最大深度
  * 给定一个二叉树，找出其最大深度。
@@ -22,8 +20,12 @@ import tree.TreeNode;
  */
 public class Problem_0104_MaximumDepthOfBinaryTree {
 
-    public static int maxDepth(TreeNode root) {
-        if (root==null) return 0;
+    public int maxDepth(TreeNode root) {
+        if(root==null)return 0;
+        if(root.left==null && root.right==null) return 1;
+        if(root.left==null ^ root.right==null) {
+            return root.left == null ? maxDepth(root.right) + 1 : maxDepth(root.left) + 1;
+        }
         return Math.max(maxDepth(root.left), maxDepth(root.right)) + 1;
     }
 }

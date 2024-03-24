@@ -1,8 +1,7 @@
 package com.joey.top_hot;
 
-import tree.TreeNode;
-
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 105. 从前序与中序遍历序列构造二叉树
@@ -25,25 +24,30 @@ import java.util.HashMap;
  */
 public class Problem_0105_ConstructBinaryTreeFromPreorderAndInorderTraversal {
 
-    public static TreeNode buildTree(int[] preorder, int[] inorder) {
-        HashMap<Integer, Integer> map = new HashMap<>();
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        Map<Integer, Integer> map = new HashMap<>();
         for (int i=0;i<inorder.length;i++) {
             map.put(inorder[i], i);
         }
-        return build(preorder, 0, preorder.length-1, inorder, 0, inorder.length-1, map);
+        return fun(preorder,0, preorder.length-1,inorder,0,inorder.length-1, map);
     }
 
-
-    //递归含义
-    //使用pre[l1,r1] in[l2,r2]建树，返回头节点
-    //map：inorder数组中，每个值对应的位置 组成的map
-    private static TreeNode build(int[] pre, int l1, int r1, int[] in, int l2, int r2, HashMap<Integer,Integer> map) {
-        if (l1>r1 && l2>r2) return null;
+    //使用pre[l1,r1],in[l2,r2]构建的二叉树头节点返回
+    private TreeNode fun(int[]pre, int l1,int r1, int[] in, int l2, int r2, Map<Integer, Integer> map) {
+        if (l1>r1) return null;
+        if (l1==r1) return new TreeNode(pre[l1]);
+        //l1<r1
+        // 3,9,20,15,7
+        // 0 1  2  3 4
+        // 9,3,15,20,7
+        // 0 1 2  3  4
         TreeNode root = new TreeNode(pre[l1]);
-        int pos = map.get(pre[l1]);
-        int leftLen = pos-l2;
-        root.left = build(pre, l1+1, l1+leftLen, in, l2, pos-1, map);
-        root.right = build(pre, l1+leftLen+1, r1, in, pos+1, r2, map);
+        int index = map.get(pre[l1]);
+        int llen = index-l2; // 左子树的数组长度
+        root.left = fun(pre, l1+1, l1+llen, in, l2, index-1, map);
+        root.right = fun(pre, l1+llen+1, r1, in, index+1, r2, map);
         return root;
     }
+
+
 }

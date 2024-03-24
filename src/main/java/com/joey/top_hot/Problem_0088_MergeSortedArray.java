@@ -16,19 +16,18 @@ package com.joey.top_hot;
  */
 public class Problem_0088_MergeSortedArray {
 
-    public static void merge(int[] nums1, int m, int[] nums2, int n) {
+    public void merge(int[] arr1, int m, int[] arr2, int n) {
         int p1 = m - 1;
         int p2 = n - 1;
-        int p = nums1.length - 1;
+        int index = arr1.length - 1;
         while (p1 >= 0 && p2 >= 0) {
-            nums1[p--] = (nums1[p1] >= nums2[p2]) ? nums1[p1--] : nums2[p2--];
+            if (arr1[p1] >= arr2[p2]) {
+                arr1[index--] = arr1[p1--];
+            } else {
+                arr1[index--] = arr2[p2--];
+            }
         }
-
-        while (p1 >= 0) {
-            nums1[p--] = nums1[p1--];
-        }
-        while (p2 >= 0) {
-            nums1[p--] = nums2[p2--];
-        }
+        while (p1 >= 0) arr1[index--] = arr1[p1--];
+        while (p2 >= 0) arr1[index--] = arr2[p2--];
     }
 }

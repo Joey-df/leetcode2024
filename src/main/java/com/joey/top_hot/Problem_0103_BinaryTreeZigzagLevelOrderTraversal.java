@@ -1,7 +1,5 @@
 package com.joey.top_hot;
 
-import tree.TreeNode;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -28,30 +26,31 @@ import java.util.List;
  */
 public class Problem_0103_BinaryTreeZigzagLevelOrderTraversal {
 
-    public static List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
         List<List<Integer>> ans = new ArrayList<>();
         if (root==null) return ans;
-        LinkedList<TreeNode> q = new LinkedList<>();
+        LinkedList<TreeNode > q = new LinkedList<>();
         q.addLast(root);
-        boolean flag = true;
-        while(!q.isEmpty()) {
-            int size = q.size();
-            ArrayList<Integer> sub = new ArrayList<>();
-            while(size-- > 0 ) {
-                if (flag) {
+        boolean ltor = true;
+        int size;
+        while (!q.isEmpty()) {
+            size = q.size();
+            List<Integer > cur  = new ArrayList<>();
+            for (int i=0;i<size;i++) {
+                if (ltor) {
                     TreeNode node = q.pollFirst();
-                    sub.add(node.val);
-                    if (node.left != null) q.addLast(node.left);
-                    if (node.right != null) q.addLast(node.right);
+                    cur.add(node.val);
+                    if (node.left!=null) q.addLast(node.left);
+                    if (node.right!=null) q.addLast(node.right);
                 } else {
                     TreeNode node = q.pollLast();
-                    sub.add(node.val);
-                    if (node.right != null) q.addFirst(node.right);
-                    if (node.left != null) q.addFirst(node.left);
+                    cur.add(node.val);
+                    if (node.right!=null) q.addFirst(node.right);
+                    if (node.left!=null) q.addFirst(node.left);
                 }
             }
-            flag = !flag;
-            ans.add(sub);
+            ltor = !ltor;
+            ans.add(cur);
         }
         return ans;
     }

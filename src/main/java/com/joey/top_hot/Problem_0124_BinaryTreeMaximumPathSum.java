@@ -1,8 +1,6 @@
 package com.joey.top_hot;
 
 
-import tree.TreeNode;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
