@@ -20,29 +20,24 @@ import java.util.*;
  */
 public class Problem_0049_GroupAnagrams {
 
-    public static List<List<String>> groupAnagrams(String[] strs) {
+    // use hashmap
+    public List<List<String>> groupAnagrams(String[] arr) {
         List<List<String>> ans = new ArrayList<>();
-        if (strs == null || strs.length == 0) {
-            return ans;
-        }
+        if (arr==null || arr.length==0) return ans;
         Map<String, List<String>> map = new HashMap<>();
-        for (String s : strs) {
-            char[] str = s.toCharArray();
-            Arrays.sort(str);
-            String sorted = String.valueOf(str);
-            if (!map.containsKey(sorted)) {
-                map.put(sorted, new ArrayList<>());
+        for (String str: arr) {
+            char[] cur = str.toCharArray();
+            Arrays.sort(cur);
+            String key = String.valueOf(cur);
+            if (!map.containsKey(key)) {
+                map.put(key, new ArrayList<>());
             }
-            map.get(sorted).add(s);
+            map.get(key).add(str);
         }
-        for (String key : map.keySet()) {
+        for (String key: map.keySet()) {
             ans.add(map.get(key));
         }
         return ans;
     }
 
-    public static void main(String[] args) {
-        String[] strs = new String[]{"eat", "tea", "tan", "ate", "nat", "bat"};
-        System.out.println(groupAnagrams(strs));
-    }
 }

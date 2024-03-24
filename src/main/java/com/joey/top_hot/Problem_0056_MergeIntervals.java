@@ -3,6 +3,7 @@ package com.joey.top_hot;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 
 /**
  * 以数组 intervals 表示若干个区间的集合，其中单个区间为 intervals[i] = [starti, endi] 。
@@ -22,56 +23,28 @@ import java.util.Comparator;
  */
 public class Problem_0056_MergeIntervals {
 
-    public static class Range {
-        public int start;
-        public int end;
-
-        public Range(int s, int e) {
-            start = s;
-            end = e;
-        }
-    }
-
-    public static class RangeComparator implements Comparator<Range> {
-
-        @Override
-        public int compare(Range o1, Range o2) {
-            return o1.start - o2.start;
-        }
-
-    }
-
-    // intervals  N * 2
-    public static int[][] merge(int[][] intervals) {
-        if (intervals.length == 0) {
-            return new int[0][0];
-        }
-        Range[] arr = new Range[intervals.length];
-        for (int i = 0; i < intervals.length; i++) {
-            arr[i] = new Range(intervals[i][0], intervals[i][1]);
-        }
-        Arrays.sort(arr, new RangeComparator());
-        ArrayList<Range> ans = new ArrayList<>();
-        int s = arr[0].start;
-        int e = arr[0].end;
-        for (int i = 1; i < arr.length; i++) {
-            if (arr[i].start > e) {
-                ans.add(new Range(s, e));
-                s = arr[i].start;
-                e = arr[i].end;
-            } else {
-                e = Math.max(e, arr[i].end);
+    //[[1,3],[2,6],[8,10],[15,18]]
+    public int[][] merge(int[][] arr) {
+        if (arr == null || arr.length == 0) return new int[0][2];
+        Arrays.sort(arr, (a, b) -> a[0] - b[0]); // important
+        int n = arr.length;
+        List<int[]> list = new ArrayList<>();
+        list.add(arr[0]); // 先把第一个区间加进去
+        for (int i = 1; i < n; i++) {
+            int[] last = list.get(list.size() - 1);
+            int[] cur = arr[i];
+            if (cur[0] > last[1]) {
+                list.add(cur);
+            } else { // <=
+                last[1] = Math.max(last[1], cur[1]);
             }
         }
-        ans.add(new Range(s, e));
-        return generateMatrix(ans);
-    }
-
-    public static int[][] generateMatrix(ArrayList<Range> list) {
-        int[][] matrix = new int[list.size()][2];
-        for (int i = 0; i < list.size(); i++) {
-            matrix[i] = new int[] { list.get(i).start, list.get(i).end };
+        // collect ans
+        int[][] ans = new int[list.size()][2];
+        int i = 0;
+        for (int[] cur : list) {
+            ans[i++] = cur;
         }
-        return matrix;
+        return ans;
     }
 }

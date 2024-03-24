@@ -25,25 +25,25 @@ package com.joey.top_hot;
  */
 public class Problem_0075_SortColors {
     //就是荷兰国旗问题
-    public static void sortColors(int[] nums) {
-        int less = -1;
-        int more = nums.length;
-        int i = 0;
+    public void sortColors(int[] arr) {
+        if (arr == null || arr.length < 2) return;
+        int n = arr.length;
+        int l = 0, r = n - 1;
+        int less = l - 1;
+        int more = r + 1;
+        int i = l;
         int base = 1;
         while (i < more) {
-            if (nums[i] == base) {
-                i++;
-            } else if (nums[i] < base) {
-                swap(nums, ++less, i++);
-            } else {
-                swap(nums, --more, i);
-            }
+            if (arr[i] == base) i++;
+            else if (arr[i] < base) swap(arr, ++less, i++);
+            else swap(arr, --more, i);
         }
     }
 
-    private static void swap(int[] arr, int i, int j) {
+    private void swap(int[] arr, int i, int j) {
         int t = arr[i];
         arr[i] = arr[j];
         arr[j] = t;
     }
+
 }

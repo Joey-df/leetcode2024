@@ -19,43 +19,26 @@ package com.joey.top_hot;
  * 示例 3：
  * 输入：digits = [0]
  * 输出：[1]
+ * 提示：
+ * 1 <= digits.length <= 100
+ * 0 <= digits[i] <= 9
  */
 public class Problem_0066_PlusOne {
 
-    public static int[] plusOne(int[] digits) {
-        int N = digits.length;
-        if (digits[N - 1] < 9) {
-            digits[N - 1]++;
-            return digits;
-        }
-        //最后一位等于9
-        digits[N - 1] = 0;
-        for (int i = N - 2; i >= 0; i--) {
+    public int[] plusOne(int[] digits) {
+        int n = digits.length;
+        for (int i = n - 1; i >= 0; i--) {
             if (digits[i] < 9) {
                 digits[i]++;
                 return digits;
             }
+            // 是9
             digits[i] = 0;
         }
-        int[] ans = new int[N + 1];
+        // 走到这里，说明全是9
+        int[] ans = new int[n + 1];
         ans[0] = 1;
         return ans;
     }
 
-    public static int[] func(int[] nums) {
-        assert (nums != null && nums.length > 0);
-        int N = nums.length;
-        for (int i = N - 1; i >= 0; i--) {
-            if (nums[i] < 9) {
-                nums[i]++;
-                return nums;
-            } else { //==9
-                nums[i] = 0;
-            }
-        }
-        //全是9
-        int[] ans = new int[N + 1];
-        ans[0] = 1;
-        return ans;
-    }
 }

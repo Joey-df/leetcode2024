@@ -1,5 +1,6 @@
 package com.joey.top_hot;
 
+// ignore
 /**
  * 76. 最小覆盖子串
  * 给你一个字符串 s 、一个字符串 t 。返回 s 中涵盖 t 所有字符的最小子串。
