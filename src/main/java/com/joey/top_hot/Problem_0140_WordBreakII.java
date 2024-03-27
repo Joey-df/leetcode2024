@@ -1,123 +1,62 @@
 package com.joey.top_hot;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 140. 单词拆分 II
  * 给定一个非空字符串 s 和一个包含非空单词列表的字典 wordDict，
  * 在字符串中增加空格来构建一个句子，使得句子中所有的单词都在词典中。返回所有这些可能的句子。
- *
+ * <p>
  * 说明：
  * 分隔时可以重复使用字典中的单词。
  * 你可以假设字典中没有重复的单词。
- *
+ * <p>
  * 示例 1：
  * 输入:
  * s = "catsanddog"
  * wordDict = ["cat", "cats", "and", "sand", "dog"]
  * 输出:
  * [
- *   "cats and dog",
- *   "cat sand dog"
+ * "cats and dog",
+ * "cat sand dog"
  * ]
  */
 public class Problem_0140_WordBreakII {
 
-    public static class Node {
-        public String path;
-        public boolean end;
-        public Node[] nexts;
 
-        public Node() {
-            path = null;
-            end = false;
-            nexts = new Node[26];
-        }
-    }
-
-    public static List<String> wordBreak(String s, List<String> wordDict) {
-        char[] str = s.toCharArray();
-        Node root = gettrie(wordDict);
-        boolean[] dp = getdp(s, root);
-        ArrayList<String> path = new ArrayList<>();
+    public List<String> wordBreak(String s, List<String> wordDict) {
         List<String> ans = new ArrayList<>();
-        process(str, 0, root, dp, path, ans);
+        if (s == null || s.length() == 0) return ans;
+        fun(s, 0, new HashSet<>(wordDict), new ArrayList<>(), ans);
         return ans;
     }
 
-    // str[index.....] 是要搞定的字符串
-    // dp[0...N-1] 0... 1.... 2... N-1... 在dp里
-    // root 单词表所有单词生成的前缀树头节点
-    // path str[0..index-1]做过决定了，做的决定放在path里
-    public static void process(char[] str, int index, Node root, boolean[] dp, ArrayList<String> path,
-                               List<String> ans) {
-        if (index == str.length) {
+    //递归含义
+    //s[0,index-1]已经搞定了不用操心了
+    //沿途形成的路径为path
+    //ans收集答案
+    private void fun(String s, int index, Set<String> words, ArrayList<String> path, List<String> ans) {
+        if (index == s.length()) {
+            //collect ans
             StringBuilder builder = new StringBuilder();
-            for (int i = 0; i < path.size() - 1; i++) {
-                builder.append(path.get(i) + " ");
+            for (int i = 0; i < path.size(); i++) {
+                builder.append(path.get(i));
+                if (i < path.size() - 1) builder.append(" ");
             }
-            builder.append(path.get(path.size() - 1));
             ans.add(builder.toString());
         } else {
-            Node cur = root;
-            for (int end = index; end < str.length; end++) {
-                // str[i..end] （能不能拆出来）
-                int road = str[end] - 'a';
-                if (cur.nexts[road] == null) {
-                    break;
-                }
-                cur = cur.nexts[road];
-                if (cur.end && dp[end + 1]) {
-                    // [i...end] 前缀串
-                    // str.subString(i,end+1)  [i..end]
-                    path.add(cur.path);
-                    process(str, end + 1, root, dp, path, ans);
-                    path.remove(path.size() - 1);
+            for (int end = index; end < s.length(); end++) {
+                String cur = s.substring(index, end + 1);
+                if (words.contains(cur)) {
+                    path.add(cur);
+                    fun(s, end + 1, words, path, ans);
+                    path.remove(path.size() - 1);//clear
                 }
             }
         }
-    }
-
-    public static Node gettrie(List<String> wordDict) {
-        Node root = new Node();
-        for (String str : wordDict) {
-            char[] chs = str.toCharArray();
-            Node node = root;
-            int index = 0;
-            for (int i = 0; i < chs.length; i++) {
-                index = chs[i] - 'a';
-                if (node.nexts[index] == null) {
-                    node.nexts[index] = new Node();
-                }
-                node = node.nexts[index];
-            }
-            node.path = str;
-            node.end = true;
-        }
-        return root;
-    }
-
-    public static boolean[] getdp(String s, Node root) {
-        char[] str = s.toCharArray();
-        int N = str.length;
-        boolean[] dp = new boolean[N + 1];
-        dp[N] = true;
-        for (int i = N - 1; i >= 0; i--) {
-            Node cur = root;
-            for (int end = i; end < N; end++) {
-                int path = str[end] - 'a';
-                if (cur.nexts[path] == null) {
-                    break;
-                }
-                cur = cur.nexts[path];
-                if (cur.end && dp[end + 1]) {
-                    dp[i] = true;
-                    break;
-                }
-            }
-        }
-        return dp;
     }
 
 }

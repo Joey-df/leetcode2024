@@ -9,7 +9,8 @@ public class Problem_0141_LinkedListCycle {
 
     public boolean hasCycle(ListNode head) {
         if (head == null || head.next == null) return false;
-        ListNode s = head.next, f = head.next.next;
+        ListNode s = head.next;
+        ListNode f = head.next.next;
         while (s != f) {
             if (f == null || f.next == null) return false;
             s = s.next;

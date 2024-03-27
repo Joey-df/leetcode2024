@@ -6,7 +6,8 @@ public class Problem_0142_LinkedListCycleII {
 
     public ListNode detectCycle(ListNode head) {
         if (head == null || head.next == null) return null;
-        ListNode s = head.next, f = head.next.next;
+        ListNode s = head.next;
+        ListNode f = head.next.next;
         while (s != f) {
             if (f == null || f.next == null) return null;
             s = s.next;

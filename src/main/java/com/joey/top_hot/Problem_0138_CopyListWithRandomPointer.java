@@ -1,5 +1,8 @@
 package com.joey.top_hot;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 138. 复制带随机指针的链表
  */
@@ -19,40 +22,19 @@ public class Problem_0138_CopyListWithRandomPointer {
     }
 
     public Node copyRandomList(Node head) {
-        if (head == null) return head;
-        // a->b->c->d->null
-        Node next = null;
+        if (head == null) return null;
+        Map<Node, Node> map = new HashMap<>();
         Node cur = head;
-        // link new nodes
         while (cur != null) {
-            next = cur.next; // b
-            Node node = new Node(cur.val); // a'
-            cur.next = node;
-            node.next = next;
-            cur = next;
+            map.put(cur, new Node(cur.val));
+            cur = cur.next;
         }
-
-        // a->a'->b->b'->c->c'->d->d'->null
-        // link random
         cur = head;
-        Node copy = null;
         while (cur != null) {
-            next = cur.next.next;
-            copy = cur.next;
-            copy.random = (cur.random != null) ? cur.random.next : null;
-            cur = next;
+            map.get(cur).next = map.get(cur.next);
+            map.get(cur).random = map.get(cur.random);
+            cur = cur.next;
         }
-
-        // split
-        Node res = head.next;
-        cur = head; //a
-        while (cur != null) {
-            next = cur.next.next; //b
-            copy = cur.next;//a'
-            cur.next = next;
-            copy.next = (next == null) ? null : next.next;
-            cur = next;
-        }
-        return res;
+        return map.get(head);
     }
 }

@@ -8,115 +8,74 @@ import java.util.Queue;
 /**
  * 207. 课程表
  * 你这个学期必须选修 numCourses 门课程，记为 0 到 numCourses - 1 。
- *
+ * <p>
  * 在选修某些课程之前需要一些先修课程。
  * 先修课程按数组 prerequisites 给出，
  * 其中 prerequisites[i] = [ai, bi] ，
  * 表示如果要学习课程 ai 则 必须 先学习课程  bi 。
- *
+ * <p>
  * 例如，先修课程对 [0, 1] 表示：想要学习课程 0 ，你需要先完成课程 1 。
  * 请你判断是否可能完成所有课程的学习？如果可以，返回 true ；否则，返回 false 。
- *
+ * <p>
  * 示例 1：
  * 输入：numCourses = 2, prerequisites = [[1,0]]
  * 输出：true
  * 解释：总共有 2 门课程。学习课程 1 之前，你需要完成课程 0 。这是可能的。
- *
+ * <p>
  * 示例 2：
  * 输入：numCourses = 2, prerequisites = [[1,0],[0,1]]
  * 输出：false
- * 解释：总共有 2 门课程。学习课程 1 之前，你需要先完成​课程 0 ；并且学习课程 0 之前，你还应先完成课程 1 。这是不可能的。
+ * 解释：总共有 2 门课程。学习课程 1 之前，你需要先完成课程 0 ；并且学习课程 0 之前，你还应先完成课程 1 。这是不可能的。
  */
 //图的拓扑排序
 public class Problem_0207_CourseSchedule {
 
-    // 一个node，就是一个课程
-    // name是课程的编号
-    // in是课程的入度
-    public static class Node {
-        public int name;
-        public int in;
-        public ArrayList<Node> nexts;
+    static class Node {
+        int name; // 课程编号
+        int in; // 入度
+        ArrayList<Node> nexts; // 邻居
 
-        public Node(int n) {
-            name = n;
-            in = 0;
-            nexts = new ArrayList<>();
+        public Node(int name) {
+            this.name = name;
+            this.nexts = new ArrayList<>();
         }
     }
 
-    public static boolean canFinish1(int numCourses, int[][] prerequisites) {
-        if (prerequisites == null || prerequisites.length == 0) {
-            return true;
-        }
-        HashMap<Integer, Node> nodes = new HashMap<>();
-        for (int[] arr : prerequisites) {
-            int to = arr[0];
-            int from = arr[1];
-            if (!nodes.containsKey(to)) {
-                nodes.put(to, new Node(to));
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        if (prerequisites == null || prerequisites.length == 0) return true;
+        HashMap<Integer, Node> map = new HashMap<>();
+        for (int i = 0; i < prerequisites.length; i++) {
+            int[] cur = prerequisites[i];
+            int to = cur[0];
+            int from = cur[1];
+            if (!map.containsKey(to)) {
+                map.put(to, new Node(to));
             }
-            if (!nodes.containsKey(from)) {
-                nodes.put(from, new Node(from));
+            if (!map.containsKey(from)) {
+                map.put(from, new Node(from));
             }
-            Node t = nodes.get(to);
-            Node f = nodes.get(from);
-            f.nexts.add(t);
-            t.in++;
+            map.get(to).in++;
+            map.get(from).nexts.add(map.get(to));
         }
-        int needPrerequisiteNums = nodes.size();
-        Queue<Node> zeroInQueue = new LinkedList<>();
-        for (Node node : nodes.values()) {
-            if (node.in == 0) {
-                zeroInQueue.add(node);
-            }
-        }
-        int count = 0;
-        while (!zeroInQueue.isEmpty()) {
-            Node cur = zeroInQueue.poll();
-            count++;
-            for (Node next : cur.nexts) {
-                if (--next.in == 0) {
-                    zeroInQueue.add(next);
-                }
-            }
-        }
-        return count == needPrerequisiteNums;
-    }
 
-    // 和方法1算法过程一样
-    // 但是写法优化了
-    public static boolean canFinish2(int courses, int[][] relation) {
-        if (relation == null || relation.length == 0) {
-            return true;
-        }
-        ArrayList<ArrayList<Integer>> nexts = new ArrayList<>();
-        for (int i = 0; i < courses; i++) {
-            nexts.add(new ArrayList<>());
-        }
-        int[] in = new int[courses];
-        for (int[] arr : relation) {
-            nexts.get(arr[1]).add(arr[0]);
-            in[arr[0]]++;
-        }
-        int[] zero = new int[courses];
-        int l = 0;
-        int r = 0;
-        for (int i = 0; i < courses; i++) {
-            if (in[i] == 0) {
-                zero[r++] = i;
+        LinkedList<Integer> q = new LinkedList<>();
+        for (int name : map.keySet()) {
+            if (map.get(name).in == 0) {
+                q.addLast(name);
             }
         }
         int count = 0;
-        while (l != r) {
+        while (!q.isEmpty()) {
+            int name = q.pollFirst();
             count++;
-            for (int next : nexts.get(zero[l++])) {
-                if (--in[next] == 0) {
-                    zero[r++] = next;
+            Node cur = map.get(name);
+            for (Node node : cur.nexts) {
+                if (--node.in == 0) {
+                    q.addLast(node.name);
                 }
             }
         }
-        return count == nexts.size();
+        return count == map.size();
     }
 
 }

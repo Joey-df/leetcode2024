@@ -1,6 +1,8 @@
 package com.joey.top_hot;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -30,21 +32,21 @@ public class Problem_0083_RemoveDuplicatesFromSortedList {
 
     //进阶
     public ListNode deleteDuplicates2(ListNode head) {
-        if (head == null || head.next == null) return head;
+        if (head == null) return null;
         Set<Integer> set = new HashSet<>();
-        ListNode dummy = new ListNode(-1);
-        dummy.next = head;
-        ListNode pre = dummy, cur = head;
+        set.add(head.val);
+        ListNode pre = head;
+        ListNode cur = head.next;
         while (cur != null) {
             if (set.contains(cur.val)) {
                 pre.next = cur.next;
-                cur = cur.next;
             } else {
                 pre = cur;
                 set.add(cur.val);
-                cur = cur.next;
             }
+            cur = cur.next;
         }
         return head;
     }
+
 }

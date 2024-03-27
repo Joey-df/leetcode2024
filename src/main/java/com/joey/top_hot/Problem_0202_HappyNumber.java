@@ -1,14 +1,15 @@
 package com.joey.top_hot;
 
 import java.util.HashSet;
+import java.util.Set;
 import java.util.TreeSet;
 
 /**
  * 202. 快乐数
  * 编写一个算法来判断一个数 n 是不是快乐数。
- *
+ * <p>
  * 「快乐数」定义为：
- *
+ * <p>
  * 对于一个正整数，每一次将该数替换为它每个位置上的数字的平方和。
  * 然后重复这个过程直到这个数变为 1，也可能是 无限循环 但始终变不到 1。
  * 如果 可以变为  1，那么这个数就是快乐数。
@@ -16,55 +17,25 @@ import java.util.TreeSet;
  */
 public class Problem_0202_HappyNumber {
 
-    public static boolean isHappy1(int n) {
-        HashSet<Integer> set = new HashSet<>();
-        while (n != 1) {
-            int sum = 0; //n每个位置上的数字的平方和
-            while (n != 0) {
-                int r = n % 10; //拿到个位数
-                sum += r * r;
-                n /= 10;
-            }
-            n = sum;
-            if (set.contains(n)) {
-                break;
-            }
-            set.add(n);
-        }
-        //while跳出的时机：n=1 或者 n在set中(出现无限循环了)
-        return n == 1;
-    }
-
-    // 实验代码
-    public static TreeSet<Integer> sum(int n) {
-        TreeSet<Integer> set = new TreeSet<>();
-        while (!set.contains(n)) {
-            set.add(n);
+    //完全根据快乐数定义用代码模拟
+    public boolean isHappy(int n) {
+        //19
+        Set<Integer> set = new HashSet<>();
+        int num = n;
+        while (num != 1) {
             int sum = 0;
-            while (n != 0) {
-                sum += (n % 10) * (n % 10);
-                n /= 10;
+            while (num != 0) {
+                int d = num % 10; // 9
+                sum += d * d;
+                num = num / 10; // 1
             }
-            n = sum;
-        }
-        return set;
-    }
-
-    public static boolean isHappy2(int n) {
-        while (n != 1 && n != 4) {
-            int sum = 0;
-            while (n != 0) {
-                sum += (n % 10) * (n % 10);
-                n /= 10;
+            num = sum; // 下一轮的总和：如82
+            if (set.contains(num)) {
+                break; // 出现了循环
             }
-            n = sum;
+            set.add(num);
         }
-        return n == 1;
-    }
-
-    public static void main(String[] args) {
-        for (int i = 1; i < 100; i++) {
-            System.out.println(sum(i));
-        }
+        // num == 1 或者break跳出的
+        return num == 1;
     }
 }

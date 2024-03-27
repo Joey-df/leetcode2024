@@ -1,16 +1,18 @@
 package com.joey.top_hot;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 139. 单词拆分
  * 给定一个非空字符串 s 和一个包含非空单词的列表 wordDict，
  * 判定 s 是否可以被空格拆分为一个或多个在字典中出现的单词。
- *
+ * <p>
  * 说明：
  * 拆分时可以重复使用字典中的单词。
  * 你可以假设字典中没有重复的单词。
- *
+ * <p>
  * 示例 1：
  * 输入: s = "leetcode", wordDict = ["leet", "code"]
  * 输出: true
@@ -19,93 +21,28 @@ import java.util.List;
 // lintcode也有测试，数据量比leetcode大很多 : https://www.lintcode.com/problem/107/
 public class Problem_0139_WordBreak {
 
-    public static class Node {
-        public boolean end;
-        public Node[] nexts;
 
-        public Node() {
-            end = false;
-            nexts = new Node[26];
-        }
+    public boolean wordBreak(String s, List<String> wordDict) {
+        if (s == null || s.length() == 0) return false;
+        return fun(s, 0, new HashSet<>(wordDict)) > 0;
     }
 
-    public static boolean wordBreak1(String s, List<String> wordDict) {
-        Node root = new Node();
-        for (String str : wordDict) {
-            char[] chs = str.toCharArray();
-            Node node = root;
-            int index = 0;
-            for (int i = 0; i < chs.length; i++) {
-                index = chs[i] - 'a';
-                if (node.nexts[index] == null) {
-                    node.nexts[index] = new Node();
-                }
-                node = node.nexts[index];
-            }
-            node.end = true;
+    //递归含义：
+    //s[0,index-1]已经搞定了不用再操心了
+    //s从0出发，被set中单词表分解的方法数返回
+    public int fun(String s, int index, Set<String> set) {
+        if (index == s.length()) {
+            return 1;
         }
-        char[] str = s.toCharArray();
-        int N = str.length;
-        boolean[] dp = new boolean[N + 1];
-        dp[N] = true; // dp[i]  word[i.....] 能不能被分解
-        // dp[N] word[N...]  -> ""  能不能够被分解
-        // dp[i] ... dp[i+1....]
-        for (int i = N - 1; i >= 0; i--) {
-            // i
-            // word[i....] 能不能够被分解
-            // i..i    i+1....
-            // i..i+1  i+2...
-            Node cur = root;
-            for (int end = i; end < N; end++) {
-                cur = cur.nexts[str[end] - 'a'];
-                if (cur == null) {
-                    break;
-                }
-                // 有路！
-                if (cur.end) {
-                    // i...end 真的是一个有效的前缀串  end+1....  能不能被分解
-                    dp[i] |= dp[end + 1];
-                }
-                if (dp[i]) {
-                    break;
-                }
+        int ans = 0;
+        for (int end = index; end < s.length(); end++) {
+            String cur = s.substring(index, end + 1);
+            if (set.contains(cur)) {
+                ans += fun(s, end + 1, set);
             }
         }
-        return dp[0];
+        return ans;
     }
 
-    public static int wordBreak2(String s, List<String> wordDict) {
-        Node root = new Node();
-        for (String str : wordDict) {
-            char[] chs = str.toCharArray();
-            Node node = root;
-            int index = 0;
-            for (int i = 0; i < chs.length; i++) {
-                index = chs[i] - 'a';
-                if (node.nexts[index] == null) {
-                    node.nexts[index] = new Node();
-                }
-                node = node.nexts[index];
-            }
-            node.end = true;
-        }
-        char[] str = s.toCharArray();
-        int N = str.length;
-        int[] dp = new int[N + 1];
-        dp[N] = 1;
-        for (int i = N - 1; i >= 0; i--) {
-            Node cur = root;
-            for (int end = i; end < N; end++) {
-                cur = cur.nexts[str[end] - 'a'];
-                if (cur == null) {
-                    break;
-                }
-                if (cur.end) {
-                    dp[i] += dp[end + 1];
-                }
-            }
-        }
-        return dp[0];
-    }
 
 }

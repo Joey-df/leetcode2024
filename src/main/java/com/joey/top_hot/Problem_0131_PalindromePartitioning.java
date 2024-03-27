@@ -20,58 +20,48 @@ import java.util.List;
  */
 public class Problem_0131_PalindromePartitioning {
 
-    public static List<List<String>> partition(String s) {
+    public List<List<String>> partition(String s) {
         List<List<String>> ans = new ArrayList<>();
-        if (s == null || s.length() == 0) {
-            return ans;
-        }
-        boolean[][] dp = isP(s);
-        LinkedList<String> path = new LinkedList<>();
-        func(s, 0, path, ans, dp);
+        if (s == null || s.length() == 0) return ans;
+        boolean[][] dp = is(s);
+        fun(s, 0, ans, new ArrayList<>(), dp);
         return ans;
     }
 
-    //递归含义
-    //str为固定输入
-    //当前来到index位置
-    //str[0...index-1]已经搞定了，不用操心了
-    //str[0...index-1]做的决定，沿途形成的路径，存在path里
-    //ans用来收集答案
-    public static void func(String str, int index, LinkedList<String> path, List<List<String>> ans, boolean[][] dp) {
+    //str[0,index-1]已经搞定了，沿途的路径存在path里
+    //ans收集答案
+    private void fun(String str, int index, List<List<String>> ans, ArrayList<String> path, boolean[][] dp) {
         if (index == str.length()) {
-            //表示str[0...N-1]已经搞定了，path为沿途的路径
+            //collect ans
             ans.add(new ArrayList<>(path));
         } else {
             for (int end = index; end < str.length(); end++) {
-                if (dp[index][end]){
-                    path.addLast(str.substring(index, end + 1));
-                    func(str, end + 1, path, ans, dp);
-                    path.pollLast();
+                if (dp[index][end]) {
+                    path.add(str.substring(index, end + 1));
+                    fun(str, end + 1, ans, path, dp);
+                    path.remove(path.size() - 1); // clear
                 }
             }
         }
     }
 
-    //s.length>0
-    private static boolean[][] isP(String s) {
+    private boolean[][] is(String s) {
         char[] str = s.toCharArray();
-        int N = str.length;
-        boolean[][] dp = new boolean[N][N];
-        for (int i = 0; i < N; i++) {
-            dp[i][i] = true;
-            if (i > 0) {
-                dp[i - 1][i] = str[i - 1] == str[i];
+        int n = str.length;
+        //dp[i][j]: str(i,j)范围是不是回文
+        boolean[][] dp = new boolean[n][n];
+        for (int i = 0; i < n; i++) {
+            dp[i][i] = true; // 对角线
+            if (i < n - 1) {
+                dp[i][i + 1] = str[i] == str[i + 1]; //倒数第二条对角线
             }
         }
-        for (int i = N - 3; i >= 0; i--) {
-            for (int j = i + 2; j < N; j++) {
-                dp[i][j] = str[i]==str[j] && dp[i+1][j-1];
+        for (int i = n - 3; i >= 0; i--) {
+            for (int j = i + 2; j < n; j++) {
+                dp[i][j] = str[i] == str[j] && dp[i + 1][j - 1];
             }
         }
         return dp;
     }
 
-    public static void main(String[] args) {
-        System.out.println(partition("abaKFK"));
-    }
 }

@@ -1,6 +1,7 @@
 package com.joey.top_hot;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 //113. 路径总和 II
@@ -17,11 +18,10 @@ public class Problem_0113_PathSumII {
 
     private void dfs(TreeNode root, int target, List<List<Integer>> ans, ArrayList<Integer> path) {
         if (root == null) return;
-        //第一次到达add
-        path.add(root.val);
-        //叶子结点收集答案
+        path.add(root.val); // 第一次到达add
+        // 叶子结点时收集答案
         if (root.left == null && root.right == null) {
-            if (target == root.val) {
+            if (root.val == target) {
                 ans.add(new ArrayList<>(path));
             }
         }
