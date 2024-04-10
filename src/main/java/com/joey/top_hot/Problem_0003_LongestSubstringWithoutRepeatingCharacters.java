@@ -13,14 +13,14 @@ import java.util.Arrays;
  * 链接：https://leetcode-cn.com/problems/longest-substring-without-repeating-characters
  */
 public class Problem_0003_LongestSubstringWithoutRepeatingCharacters {
-    public static int lengthOfLongestSubstring(String s) {
+    public int lengthOfLongestSubstring(String s) {
         if (s == null || s.length() == 0) return 0;
-        int[] map = new int[256];
-        Arrays.fill(map, -1);
         char[] str = s.toCharArray();
+        int[] map = new int[256];
+        for (int i = 0; i < str.length; i++) map[str[i]] = -1;
         int ans = 1;
-        int pre = 1;
-        map[str[0]] = 0; // important
+        int pre = 1; //前一个位置往左推的最大长度
+        map[str[0]] = 0;
         for (int i = 1; i < str.length; i++) {
             int cur = Math.min(pre + 1, i - map[str[i]]);
             ans = Math.max(ans, cur);
