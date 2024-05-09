@@ -1,5 +1,6 @@
 package com.joey.top_hot;
 
+import java.util.Arrays;
 import java.util.HashSet;
 
 /**
@@ -19,17 +20,36 @@ import java.util.HashSet;
 public class Problem_0217_ContainsDuplicate {
 
     //平凡解：哈希表的解法
-    //如果要额外空间复杂度O(1)的话，请使用堆排序，然后从左往右遍历找到重复出现的数
+    //使用hashSet，如果当前元素已经在set中了，说明存在重复元素
+    //时间复杂度：O(n)
+    //空间复杂度：O(n)
     public boolean containsDuplicate(int[] nums) {
-        if (nums==null || nums.length<2) {
+        if (nums == null || nums.length < 2) {
             return false;
         }
         HashSet<Integer> set = new HashSet<>();
-        for (int i = 0; i < nums.length; i++) {
-            if (set.contains(nums[i])) {
+        for (int num : nums) {
+            if (set.contains(num)) {
                 return true;
             } else {
-                set.add(nums[i]);
+                set.add(num);
+            }
+        }
+        return false;
+    }
+
+    //排序
+    //时间复杂度：O(nlogn)
+    //空间复杂度：O(logn)，递归栈的深度
+    public boolean containsDuplicate2(int[] nums) {
+        if (nums == null || nums.length < 2) {
+            return false;
+        }
+        Arrays.sort(nums);
+        int n = nums.length;
+        for (int i = 1; i < n; i++) {
+            if (nums[i] == nums[i - 1]) {
+                return true;
             }
         }
         return false;

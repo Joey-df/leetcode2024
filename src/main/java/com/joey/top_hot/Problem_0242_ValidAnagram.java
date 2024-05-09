@@ -20,13 +20,18 @@ package com.joey.top_hot;
 //判断两个字符串是否互为变形词
 public class Problem_0242_ValidAnagram {
 
+    //思路
+    //通过hash表统计词频，看词频是否完全
     public boolean isAnagram(String s, String t) {
+        //同时为空，true
         if (s == null && t == null) {
             return true;
         }
+        //一个为空一个不为空，false
         if (s == null ^ t == null) {
             return false;
         }
+        //长度不同直接false
         if (s.length() != t.length()) {
             return false;
         }

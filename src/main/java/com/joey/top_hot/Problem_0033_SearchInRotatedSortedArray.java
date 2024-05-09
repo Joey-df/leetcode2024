@@ -2,17 +2,15 @@ package com.joey.top_hot;
 
 // hard
 // ignore
-/**
- * 33. 搜索旋转排序数组
- * 整数数组 nums 按升序排列，数组中的值 互不相同 。
- * 在传递给函数之前，nums 在预先未知的某个下标 k（0 <= k < nums.length）上进行了 旋转，
- * 使数组变为 [nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]]（下标 从 0 开始 计数）。
- * 例如， [0,1,2,4,5,6,7] 在下标 3 处经旋转后可能变为 [4,5,6,7,0,1,2] 。
- * 给你 旋转后 的数组 nums 和一个整数 target ，如果 nums 中存在这个目标值 target ，则返回它的下标，否则返回 -1 。
- * 示例 1：
- * 输入：nums = [4,5,6,7,0,1,2], target = 0
- * 输出：4
- */
+//33. 搜索旋转排序数组
+//整数数组 nums 按升序排列，数组中的值 互不相同 。
+//在传递给函数之前，nums 在预先未知的某个下标 k（0 <= k < nums.length）上进行了 旋转，
+//使数组变为 [nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]]（下标 从 0 开始 计数）。
+//例如， [0,1,2,4,5,6,7] 在下标 3 处经旋转后可能变为 [4,5,6,7,0,1,2] 。
+//给你 旋转后 的数组 nums 和一个整数 target ，如果 nums 中存在这个目标值 target ，则返回它的下标，否则返回 -1 。
+//示例 1：
+//输入：nums = [4,5,6,7,0,1,2], target = 0
+//输出：4
 //在有序旋转数组中找到一个数
 public class Problem_0033_SearchInRotatedSortedArray {
 
@@ -29,27 +27,14 @@ public class Problem_0033_SearchInRotatedSortedArray {
             if (arr[M] == num) {
                 return M;
             }
-            // arr[M] != num
-            // [L] == [M] == [R] != num 无法二分
-            if (arr[L] == arr[M] && arr[M] == arr[R]) {
-                while (L != M && arr[L] == arr[M]) {
-                    L++;
-                }
-                // 1) L == M L...M 一路都相等
-                // 2) 从L到M终于找到了一个不等的位置
-                if (L == M) { // L...M 一路都相等
-                    L = M + 1;
-                    continue;
-                }
-            }
             // ...
             // arr[M] != num
             // [L] [M] [R] 不都一样的情况, 如何二分的逻辑
             if (arr[L] != arr[M]) {
                 if (arr[M] > arr[L]) { // L...M 一定有序
-                    if (num >= arr[L] && num < arr[M]) { //  3  [L] == 1    [M]   = 5   L...M - 1
+                    if (num >= arr[L] && num < arr[M]) { //  找3  [L] == 1    [M] = 5   L...M - 1 去左侧二分
                         R = M - 1;
-                    } else { // 9    [L] == 2    [M]   =  7   M... R
+                    } else { // 找9    [L] == 2    [M] = 7   M... R 去右侧二分
                         L = M + 1;
                     }
                 } else { // [L] > [M]    L....M  存在断点
@@ -59,12 +44,12 @@ public class Problem_0033_SearchInRotatedSortedArray {
                         R = M - 1;
                     }
                 }
-            } else { /// [L] [M] [R] 不都一样，  [L] === [M] -> [M]!=[R]
+            } else { // [L] [M] [R] 不都一样，  [L] === [M] -> [M]!=[R]
                 if (arr[M] < arr[R]) {
-                    if (num > arr[M] && num <= arr[R]) {
+                    if (num > arr[M] && num <= arr[R]) { //去右侧二分
                         L = M + 1;
                     } else {
-                        R = M - 1;
+                        R = M - 1; //去左侧二分
                     }
                 } else {
                     if (num >= arr[L] && num < arr[M]) {

@@ -12,10 +12,12 @@ public class Problem_0062_UniquePaths {
         //dp[i][j]含义：机器人从(0,0)出发到达(i,j)的方法数
         int[][] dp = new int[m][n];
         dp[0][0] = 1; // 从(0,0)出发到达(0,0)，一种方法
-        for (int row = 1; row < m; row++)
+        for (int row = 1; row < m; row++) {
             dp[row][0] = dp[row - 1][0]; // 第一列，从上面一步走下来
-        for (int col = 1; col < n; col++)
+        }
+        for (int col = 1; col < n; col++) {
             dp[0][col] = dp[0][col - 1]; // 第一行，从左边一步走过来
+        }
         for (int row = 1; row < m; row++) {
             for (int col = 1; col < n; col++) {
                 dp[row][col] = dp[row - 1][col] + dp[row][col - 1];

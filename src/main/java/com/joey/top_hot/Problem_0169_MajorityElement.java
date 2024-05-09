@@ -16,6 +16,9 @@ package com.joey.top_hot;
  */
 public class Problem_0169_MajorityElement {
 
+    //建立一种一次删除两种不同数的机制
+    //最后剩下来的数就是要找的数
+    //前提：the array is non-empty and the majority element always exist in the array.
     public static int majorityElement(int[] nums) {
         assert (nums != null && nums.length > 0);
         int cand = 0; //靶子
@@ -33,8 +36,4 @@ public class Problem_0169_MajorityElement {
         return cand;
     }
 
-    public static void main(String[] args) {
-        int[] nums = new int[]{3, 2, 3};
-        System.out.println(majorityElement(nums));
-    }
 }

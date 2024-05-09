@@ -20,29 +20,26 @@ package com.joey.top_hot;
  */
 public class Problem_0204_CountPrimes {
 
-    public static int countPrimes(int n) {
-        if (n < 3) {
-            return 0;
+    public int countPrimes(int n) {
+        int ans = 0;
+        for (int i = 2; i < n; i++) {
+            ans += isPrime(i) ? 1 : 0;
         }
-        // j已经不是素数了，f[j] = true;
-        boolean[] f = new boolean[n];
-        int count = n / 2; // 所有偶数都不要，还剩几个数
-        // 跳过了1、2    3、5、7、
-        for (int i = 3; i * i < n; i += 2) {
-            if (f[i]) {
-                continue;
-            }
-            // 3 -> 3 * 3 = 9   3 * 5 = 15   3 * 7 = 21
-            // 7 -> 7 * 7 = 49  7 * 9 = 63
-            // 13 -> 13 * 13  13 * 15
-            for (int j = i * i; j < n; j += 2 * i) {
-                if (!f[j]) {
-                    --count;
-                    f[j] = true;
-                }
+        return ans;
+    }
+
+    //判断x是否为质数（素数）
+    //如果一个是y是x的因子，那么分解x的两个数一定是成对出现，较小的那个数一定在[2,根号x]之间
+    //如100，//所有的因子为 2 5 10 20 50
+    public boolean isPrime(int x) {
+        //在[2,根号x]之间枚举
+        for (int i = 2; i * i <= x; i++) {
+            if (x % i == 0) {
+                return false;
             }
         }
-        return count;
+        return true;
+
     }
 
 }

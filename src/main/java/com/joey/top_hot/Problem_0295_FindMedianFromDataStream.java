@@ -37,8 +37,8 @@ public class Problem_0295_FindMedianFromDataStream {
         private PriorityQueue<Integer> minh;
 
         public MedianFinder() {
-            maxh = new PriorityQueue<>((a, b) -> b - a);
-            minh = new PriorityQueue<>((a, b) -> a - b);
+            maxh = new PriorityQueue<>((a, b) -> b - a); // left部分（数比较小的部分）
+            minh = new PriorityQueue<>((a, b) -> a - b); // right部分（数比较大的部分）
         }
 
         public void addNum(int num) {

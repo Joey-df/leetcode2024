@@ -1,6 +1,6 @@
 package com.joey.top_hot;
 
-import java.util.Stack;
+import java.util.LinkedList;
 
 /**
  * 224. 基本计算器
@@ -20,48 +20,81 @@ import java.util.Stack;
  */
 public class Problem_0224_BasicCalculator {
 
-    //Simple iterative solution by identifying characters one by one. One important thing is that the input is valid, which means the parentheses are always paired and in order.
-    //Only 5 possible input we need to pay attention:
-    //
-    //digit: it should be one digit from the current number
-    //'+': number is over, we can add the previous number and start a new number
-    //'-': same as above
-    //'(': push the previous result and the sign into the stack, set result to 0, just calculate the new result within the parenthesis.
-    //')': pop out the top two numbers from stack, first one is the sign before this pair of parenthesis, second is the temporary result before this pair of parenthesis. We add them together.
-    //Finally if there is only one number, from the above solution, we haven't add the number to the result, so we do a check see if the number is zero.
-    public int calculate(String s) {
-        Stack<Integer> stack = new Stack<Integer>();
-        int result = 0;
-        int number = 0;
-        int sign = 1;
-        for (int i = 0; i < s.length(); i++) {
-            char c = s.charAt(i);
-            if (Character.isDigit(c)) {
-                number = 10 * number + (int) (c - '0');
-            } else if (c == '+') {
-                result += sign * number;
-                number = 0;
-                sign = 1;
-            } else if (c == '-') {
-                result += sign * number;
-                number = 0;
-                sign = -1;
-            } else if (c == '(') {
-                //we push the result first, then sign;
-                stack.push(result);
-                stack.push(sign);
-                //reset the sign and result for the value in the parenthesis
-                sign = 1;
-                result = 0;
-            } else if (c == ')') {
-                result += sign * number;
-                number = 0;
-                result *= stack.pop();    //stack.pop() is the sign before the parenthesis
-                result += stack.pop();   //stack.pop() now is the result calculated before the parenthesis
+    public static int calculate(String str) {
+        return f(str.toCharArray(), 0)[0];
+    }
+
+    // 请从str[i...]往下算，遇到字符串终止位置或者右括号，就停止
+    // 返回两个值，长度为2的数组
+    // 0) 负责的这一段的结果是多少
+    // 1) 负责的这一段计算到了哪个位置
+    public static int[] f(char[] str, int i) {
+        //每个子过程一个que(栈)
+        LinkedList<String> que = new LinkedList<>();
+        int cur = 0;
+        int[] sub = null;
+        // 从i出发，开始撸串，越界或者遇到 ) 停
+        while (i < str.length && str[i] != ')') {
+            if (str[i] == ' ') { //如果遇到的是空格，直接跳过
+                i++;
+                continue;
+            }
+            if (str[i] >= '0' && str[i] <= '9') { //遇到的是数字字符，直接累加当前数字
+                cur = cur * 10 + str[i++] - '0';
+            } else if (str[i] != '(') { // 遇到的是 + - * / 运算符号
+                //每次必定都是压一个数字和一个运算符
+                addNum(que, cur); //把当前数字加进去
+                que.addLast(String.valueOf(str[i++]));//把运算符加进去
+                cur = 0; //遇到运算符就把cur清零
+            } else { // 遇到左括号了，交给子过程
+                sub = f(str, i + 1);
+                cur = sub[0];
+                i = sub[1] + 1;
             }
         }
-        if (number != 0) result += sign * number;
-        return result;
+        //while跑完的时候，还有最后一个数字cur还没放进去，要压进去
+        addNum(que, cur);
+        //最后栈中只剩下数字和加减号，直接计算结果返回
+        return new int[] { getNum(que), i };
+    }
+
+    //向栈中压入数字num
+    public static void addNum(LinkedList<String> que, int num) {
+        //如果栈不为空，先判断栈顶的运算符，如果是* /需要先将，倒数第二位的数和num做乘除运算，然后压进去
+        if (!que.isEmpty()) {
+            int cur = 0;
+            String op = que.pollLast(); //先弹出栈顶（运算符号）
+            if (op.equals("+") || op.equals("-")) {
+                que.addLast(op); //如果是加减号，拿出来再重新放回去
+            } else {
+                //如果是乘除号，将倒数第二位置的数字与即将进来的num做运算后，得到的结果，放到队尾
+                cur = Integer.valueOf(que.pollLast());
+                num = op.equals("*") ? (cur * num) : (cur / num);
+            }
+        }
+        que.addLast(String.valueOf(num));
+    }
+
+    //que中只剩下数字和加减号
+    //计算que中的结果
+    //从头到尾遍历，计算（这里体现出必须要用LinkedList）
+    public static int getNum(LinkedList<String> que) {
+        int res = 0;
+        boolean add = true;
+        String cur = null;
+        int num = 0;
+        while (!que.isEmpty()) {
+            cur = que.pollFirst();
+            if (cur.equals("+")) {
+                add = true;
+            } else if (cur.equals("-")) {
+                add = false;
+            } else { //数字
+                num = Integer.valueOf(cur);
+                res += add ? num : (-num);
+            }
+        }
+        return res;
     }
 
 }

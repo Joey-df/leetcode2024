@@ -1,6 +1,8 @@
 package com.joey.top_hot;
 
-import linked_list.ListNode;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * 160. 相交链表
@@ -10,37 +12,49 @@ import linked_list.ListNode;
 public class Problem_0160_IntersectionOfTwoLinkedLists {
 
     public ListNode getIntersectionNode(ListNode h1, ListNode h2) {
-        if (h1 == null && h2 == null) return null;
-        if (h1 == null ^ h2 == null) return null;
+        if (h1 == null || h2 == null) return null;
         //都不为空
-        int n = 0;
-        ListNode head1 = h1;
-        ListNode head2 = h2;
-        while (h1.next != null) {
-            n++;
-            h1 = h1.next;
+        ListNode cur1 = h1, cur2 = h2;
+        int len1 = 1, len2 = 1;
+        while (cur1.next != null) {
+            cur1 = cur1.next;
+            len1++;
+        }
+        //cur1 来到最后一个结点
+        while (cur2.next != null) {
+            cur2 = cur2.next;
+            len2++;
+        }
+        if (cur1 != cur2) return null;
+        //cur1==cur2
+        ListNode longer = len1 > len2 ? h1 : h2;
+        ListNode shorter = longer == h1 ? h2 : h1;
+        int N = Math.abs(len1 - len2);
+        while (N-- > 0) {
+            longer = longer.next;
+        }
+        while (longer != shorter) {
+            longer = longer.next;
+            shorter = shorter.next;
+        }
+        return longer;
+    }
+
+    //哈希表
+    public ListNode getIntersectionNode2(ListNode h1, ListNode h2) {
+        if (h1 == null || h2 == null) return null;
+        Set<ListNode> set = new HashSet<>();
+        ListNode cur = h1;
+        while (cur != null) {
+            set.add(cur);
+            cur = cur.next;
         }
 
-        //h1来到e1
-        while (h2.next != null) {
-            n--;
-            h2 = h2.next;
+        cur = h2;
+        while (cur != null) {
+            if (set.contains(cur)) return cur;
+            cur = cur.next;
         }
-
-        if (h1 != h2) {
-            return null;
-        }
-        //相交
-        ListNode s = n < 0 ? head1 : head2;
-        ListNode l = s == head1 ? head2 : head1;
-        n = Math.abs(n);
-        while (n-- > 0) {
-            l = l.next;
-        }
-        while (s != l) {
-            s = s.next;
-            l = l.next;
-        }
-        return s;
+        return null;
     }
 }

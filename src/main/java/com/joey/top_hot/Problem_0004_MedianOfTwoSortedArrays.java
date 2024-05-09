@@ -52,9 +52,14 @@ public class Problem_0004_MedianOfTwoSortedArrays {
         int more = r + 1;
         int i = l;
         while (i < more) {
-            if (arr[i] == base) i++;
-            else if (arr[i] < base) swap(arr, i++, ++less);
-            else swap(arr, --more, i);
+            if (arr[i] == base) {
+                i++;
+            } else if (arr[i] < base) {
+                swap(arr, i++, ++less);
+            } else {
+                swap(arr, --more, i);
+            }
+
         }
         return new int[]{less + 1, more - 1};
     }

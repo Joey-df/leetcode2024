@@ -13,6 +13,7 @@ import java.util.Set;
 //leetcode41同一类题
 public class Problem_0268_MissingNumber {
 
+    //额外空间复杂度O(n)
     public int missingNumber(int[] nums) {
         Set<Integer> set = new HashSet<>();
         for(int n : nums) set.add(n);
@@ -21,5 +22,27 @@ public class Problem_0268_MissingNumber {
             ans++;
         }
         return ans;
+    }
+
+    //额外空间复杂度O(1)
+    public int missingNumber2(int[] nums) {
+        int L = 0;//[0,L-1]上已经放好了i的数
+        int R = nums.length; // [R...]为垃圾区
+        while (L < R) {
+            if (nums[L] == L) {
+                L++;
+            } else if (nums[L] < L || nums[L] >= R || nums[nums[L]] == nums[L]) {
+                swap(nums, L, --R);
+            } else {
+                swap(nums, L, nums[L]);
+            }
+        }
+        return L;
+    }
+
+    public static void swap(int[] arr, int i, int j) {
+        int tmp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = tmp;
     }
 }

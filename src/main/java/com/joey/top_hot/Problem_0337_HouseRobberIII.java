@@ -1,6 +1,5 @@
 package com.joey.top_hot;
 
-import tree.TreeNode;
 
 /**
  * 337. 打家劫舍 III
@@ -8,29 +7,29 @@ import tree.TreeNode;
  * 除了“根”之外，每栋房子有且只有一个“父“房子与之相连。
  * 一番侦察之后，聪明的小偷意识到“这个地方的所有房屋的排列类似于一棵二叉树”。
  * 如果两个直接相连的房子在同一天晚上被打劫，房屋将自动报警。
- *
+ * <p>
  * 计算在不触动警报的情况下，小偷一晚能够盗取的最高金额。
  * 示例 1:
  * 输入: [3,2,3,null,3,null,1]
- *
- *      3
- *     / \
- *    2   3
- *     \   \
- *      3   1
- *
+ * <p>
+ * 3
+ * / \
+ * 2   3
+ * \   \
+ * 3   1
+ * <p>
  * 输出: 7
  * 解释: 小偷一晚能够盗取的最高金额 = 3 + 3 + 1 = 7.
  * 示例 2:
- *
+ * <p>
  * 输入: [3,4,5,1,3,null,1]
- *
- *      3
- *     / \
- *    4   5
- *   / \   \
- *  1   3   1
- *
+ * <p>
+ * 3
+ * / \
+ * 4   5
+ * / \   \
+ * 1   3   1
+ * <p>
  * 输出: 9
  * 解释: 小偷一晚能够盗取的最高金额 = 4 + 5 = 9.
  */
@@ -38,8 +37,9 @@ import tree.TreeNode;
 public class Problem_0337_HouseRobberIII {
 
     private static class Info {
-        int yes;//要x得到的最大值
-        int no;//不要x得到的最大值
+        int yes; //整颗子树，在要头结点的最大收益
+        int no; //整颗子树，在不要头结点的最大收益
+
         public Info(int y, int n) {
             yes = y;
             no = n;
@@ -47,18 +47,18 @@ public class Problem_0337_HouseRobberIII {
     }
 
     public static Info process(TreeNode x) {
-        if(x==null) {
-            return new Info(0,0);
+        if (x == null) {
+            return new Info(0, 0);
         }
-        Info l = process(x.left);
-        Info r = process(x.right);
-        int yes = x.val + l.no + r.no;
-        int no = Math.max(l.yes,l.no) + Math.max(r.yes, r.no);
+        Info leftInfo = process(x.left);
+        Info rightInfo = process(x.right);
+        int yes = x.val + leftInfo.no + rightInfo.no;
+        int no = Math.max(leftInfo.yes, leftInfo.no) + Math.max(rightInfo.yes, rightInfo.no);
         return new Info(yes, no);
     }
 
     public int rob(TreeNode root) {
-        if (root==null) {
+        if (root == null) {
             return 0;
         }
         Info info = process(root);

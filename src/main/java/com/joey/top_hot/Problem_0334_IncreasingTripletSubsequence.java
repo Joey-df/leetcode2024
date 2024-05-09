@@ -25,7 +25,31 @@ package com.joey.top_hot;
  */
 public class Problem_0334_IncreasingTripletSubsequence {
 
+    //最优解
+    //时间复杂度：O(n)
+    //空间复杂度：O(1)
     public boolean increasingTriplet(int[] nums) {
+        if (nums==null ||nums.length < 3) {
+            return false;
+        }
+        int n = nums.length;
+        int first = nums[0];
+        int second = Integer.MAX_VALUE;
+        for (int i = 1; i < n; i++) {
+            int cur = nums[i];
+            if (cur > second) { //如果当前数 > 第二个数，直接返回true
+                return true;
+            } else if (cur > first) { //如果当前数 > 第一个数，当前数做第二个数
+                second = cur;
+            } else { //当前数不大于 first second中的任何一个，当前数变为第一个数，继续
+                first = cur;
+            }
+        }
+        return false;
+    }
+
+    //利用最长递增子序列
+    public boolean increasingTriplet2(int[] nums) {
         if (nums==null || nums.length < 3) {
             return false;
         }

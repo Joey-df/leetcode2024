@@ -20,58 +20,22 @@ import java.util.Set;
  */
 public class Problem_0448_FindAllNumbersDisappearedInAnArray {
 
-    //平凡解
     public static List<Integer> findDisappearedNumbers(int[] nums) {
-        List<Integer> ans = new ArrayList<>();
-        if (nums==null || nums.length==0) {
-            return ans;
-        }
-        int N = nums.length;
-        Set<Integer> set = new HashSet<>();
-        for (int num: nums) {
-            set.add(num);
-        }
-        for (int i=1;i<=N;i++) {
-            if (!set.contains(i)) {
-                ans.add(i);
+        int n = nums.length;
+        for (int i = 0; i < n; i++) {
+            while (nums[i] != nums[nums[i] - 1]) {
+                swap(nums, i, nums[i] - 1);
             }
         }
-        return ans;
-    }
-
-    public static void main(String[] args) {
-        int[] nums = new int[]{4,3,2,7,8,2,3,1};
-        System.out.println(findDisappearedNumbers(nums));
-    }
-
-    //最优解
-    //下标循环怼
-    //额外空间复杂度O(1)
-    public static List<Integer> findDisappearedNumbers2(int[] nums) {
-        List<Integer> ans = new ArrayList<>();
-        if (nums == null || nums.length == 0) {
-            return ans;
-        }
-        int N = nums.length;
-        for (int i = 0; i < N; i++) {
-            walk(nums, i);
-        }
-        for (int i = 0; i < N; i++) {
-            if (nums[i] != i + 1) {
+        //执行到这里，nums[i]与所处的位置i有这样的关系：nums[i]-1==i，
+        //例如：4放在3位置，如果违反这样的关系就是缺失的数字
+        List<Integer> ans = new ArrayList<Integer>();
+        for (int i = 0; i < n; i++) {
+            if (nums[i] - 1 != i) {
                 ans.add(i + 1);
             }
         }
         return ans;
-    }
-
-    public static void walk(int[] nums, int i) {
-        while (nums[i] != i + 1) { // 不断从i发货
-            int nexti = nums[i] - 1;
-            if (nums[nexti] == nexti + 1) {
-                break;
-            }
-            swap(nums, i, nexti);
-        }
     }
 
     public static void swap(int[] nums, int i, int j) {
@@ -79,4 +43,5 @@ public class Problem_0448_FindAllNumbersDisappearedInAnArray {
         nums[i] = nums[j];
         nums[j] = tmp;
     }
+
 }

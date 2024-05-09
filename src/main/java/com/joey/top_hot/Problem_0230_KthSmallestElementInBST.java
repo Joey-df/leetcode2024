@@ -1,6 +1,5 @@
 package com.joey.top_hot;
 
-import java.util.ArrayList;
 import java.util.Stack;
 
 /**
@@ -21,7 +20,7 @@ public class Problem_0230_KthSmallestElementInBST {
                 cur = cur.left;
             } else {
                 TreeNode node = stack.pop();
-                if (++count == k) {
+                if (++count == k) { //数够第k个返回
                     return node.val;
                 }
                 if (node.right != null) {

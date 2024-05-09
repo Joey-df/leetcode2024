@@ -38,10 +38,7 @@ public class Problem_0078_Subsets {
     private void fun(int[] arr, int index, ArrayList<Integer> path, List<List<Integer>> ans) {
         if (index == arr.length) {
             //collect ans
-            List<Integer> cur = new ArrayList<>();
-            for (int i = 0; i < path.size(); i++) {
-                cur.add(path.get(i));
-            }
+            List<Integer> cur = new ArrayList<>(path);
             ans.add(cur);
             return;
         }

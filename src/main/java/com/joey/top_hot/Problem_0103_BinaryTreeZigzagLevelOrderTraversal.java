@@ -30,7 +30,7 @@ public class Problem_0103_BinaryTreeZigzagLevelOrderTraversal {
         List<List<Integer>> ans = new ArrayList<>();
         if (root==null) return ans;
         LinkedList<TreeNode > q = new LinkedList<>();
-        q.addLast(root);
+        q.addLast(root); // addLast或者addFirst，这里无所谓
         boolean ltor = true;
         int size;
         while (!q.isEmpty()) {

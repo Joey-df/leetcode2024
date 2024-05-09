@@ -15,12 +15,14 @@ package com.joey.top_hot;
  * 输出: 1
  * 解释: 5! = 120, 尾数中有 1 个零.
  */
-//显而易见的结论：
-//一个数n求阶乘，1*2*3*4*5*6*7*8*9...*n，2的因子一定比5的因子多
-//一个5结合一个2得到一个0
-//so，n阶乘后结果中0的数量等于5因子的数量
+
 public class Problem_0172_FactorialTrailingZeroes {
 
+    //显而易见的结论：
+    //一个数n求阶乘，1*2*3*4*5*6*7*8*9...*n
+    //2的因子一定比5的因子多
+    //一个5结合一个2得到一个0
+    //so，n阶乘后结果中0的数量等于5因子的数量
     public static int trailingZeroes(int n) {
         int ans = 0;
         while (n != 0) {
@@ -30,7 +32,4 @@ public class Problem_0172_FactorialTrailingZeroes {
         return ans;
     }
 
-    public static void main(String[] args) {
-        System.out.println(trailingZeroes(4));
-    }
 }

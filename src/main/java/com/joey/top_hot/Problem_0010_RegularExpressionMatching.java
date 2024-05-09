@@ -3,42 +3,48 @@ package com.joey.top_hot;
 // ignore
 //hard
 
-/**
- * 10. 正则表达式匹配
- * 给你一个字符串 s 和一个字符规律 p，请你来实现一个支持 '.' 和 '*' 的正则表达式匹配。
- *
- * '.' 匹配任意单个字符
- * '*' 匹配零个或多个前面的那一个元素
- * 所谓匹配，是要涵盖 整个 字符串 s的，而不是部分字符串。
- *
- * 示例 1：
- * 输入：s = "aa" p = "a"
- * 输出：false
- * 解释："a" 无法匹配 "aa" 整个字符串。
- * 示例 2:
- * 输入：s = "aa" p = "a*"
- * 输出：true
- * 解释：因为 '*' 代表可以匹配零个或多个前面的那一个元素, 在这里前面的元素就是 'a'。因此，字符串 "aa" 可被视为 'a' 重复了一次。
- * 示例 3：
- * 输入：s = "ab" p = ".*"
- * 输出：true
- * 解释：".*" 表示可匹配零个或多个（'*'）任意字符（'.'）。
- * 示例 4：
- * 输入：s = "aab" p = "c*a*b"
- * 输出：true
- * 解释：因为 '*' 表示零个或多个，这里 'c' 为 0 个, 'a' 被重复一次。因此可以匹配字符串 "aab"。
- * 示例 5：
- * 输入：s = "mississippi" p = "mis*is*p*."
- * 输出：false
- */
+//10. 正则表达式匹配
+//给你一个字符串 s 和一个字符规律 p，请你来实现一个支持 '.' 和 '*' 的正则表达式匹配。
+//'.' 匹配任意单个字符
+//'*' 匹配零个或多个前面的那一个元素
+//所谓匹配，是要涵盖 整个 字符串 s的，而不是部分字符串。
+//示例 1：
+//输入：s = "aa" p = "a"
+//输出：false
+//解释："a" 无法匹配 "aa" 整个字符串。
+//示例 2:
+//输入：s = "aa" p = "a*"
+//输出：true
+//解释：因为 '*' 代表可以匹配零个或多个前面的那一个元素, 在这里前面的元素就是 'a'。因此，字符串 "aa" 可被视为 'a' 重复了一次。
+//示例 3：
+//输入：s = "ab" p = ".*"
+//输出：true
+//解释：".*" 表示可匹配零个或多个（'*'）任意字符（'.'）。
+//示例 4：
+//输入：s = "aab" p = "c*a*b"
+//输出：true
+//解释：因为 '*' 表示零个或多个，这里 'c' 为 0 个, 'a' 被重复一次。因此可以匹配字符串 "aab"。
+//示例 5：
+//输入：s = "mississippi" p = "mis*is*p*."
+//输出：false
+//
+//提示：
+//1 <= s.length <= 20
+//1 <= p.length <= 20
+//s 只包含从 a-z 的小写字母。
+//p 只包含从 a-z 的小写字母，以及字符 . 和 *。
+//保证每次出现字符 * 时，前面都匹配到有效的字符
 public class Problem_0010_RegularExpressionMatching {
 
+    //有效性检查
     public static boolean isValid(char[] str, char[] pattern) {
+        //目标串str中不能出现 点 或者 *
         for (char cha : str) {
             if (cha == '.' || cha == '*') {
                 return false;
             }
         }
+        //pattren串，不能以*开头，并且不能出现相邻的两个*
         for (int i = 0; i < pattern.length; i++) {
             if (pattern[i] == '*' && (i == 0 || pattern[i - 1] == '*')) {
                 return false;
@@ -57,33 +63,36 @@ public class Problem_0010_RegularExpressionMatching {
         return isValid(str, pattern) && process1(str, pattern, 0, 0);
     }
 
-    // 课堂现场写
+    // 尝试
     // str[si.....] 能否被 pattern[pi...] 变出来
     // 潜台词：pi位置，pattern[pi] != '*'
     public static boolean process1(char[] str, char[] pattern, int si, int pi) {
+        //base case 1
         if (si == str.length) { // si越界了
             if (pi == pattern.length) {
-                return true;
+                return true; //空串匹配空串
             }
+            //pi没到终止位置，[pi,pi+1]变成空串，&& [pi+2 ...]变成空串
             if (pi + 1 < pattern.length && pattern[pi + 1] == '*') {
                 return process1(str, pattern, si, pi + 2);
             }
             return false;
         }
-        // si 没越界
+        //base case 2
         if (pi == pattern.length) {
             return si == str.length;
         }
-        // si 没越界 pi 没越界
-        if (pi + 1 >= pattern.length || pattern[pi + 1] != '*') {
-            return ((str[si] == pattern[pi]) || (pattern[pi] == '.')) && process1(str, pattern, si + 1, pi + 1);
+        // si 没越界 pi 没越界 pi+1 不是*
+        if (pi + 1 >= pattern.length || pattern[pi + 1] != '*') { //pi+1位置不是*的两种情况
+            return ((str[si] == pattern[pi]) || (pattern[pi] == '.'))
+                    && process1(str, pattern, si + 1, pi + 1); //si和pi能配上，并且后续能配上
         }
-        // si 没越界 pi 没越界 pi+1 *
+        // si 没越界 pi 没越界 pi+1 是* [pi]不可配[si]
         if (pattern[pi] != '.' && str[si] != pattern[pi]) {
-            return process1(str, pattern, si, pi + 2);
+            return process1(str, pattern, si, pi + 2); //pattern[pi,pi+1]变成空串
         }
-        // si 没越界 pi 没越界 pi+1 * [pi]可配[si]
-        if (process1(str, pattern, si, pi + 2)) {
+        // si 没越界 pi 没越界 pi+1 是* [pi]可配[si]
+        if (process1(str, pattern, si, pi + 2)) { //x*变成0份
             return true;
         }
         while (si < str.length && (str[si] == pattern[pi] || pattern[pi] == '.')) {
@@ -95,7 +104,7 @@ public class Problem_0010_RegularExpressionMatching {
         return false;
     }
 
-    // 课堂现场写
+    // 改记忆化搜索
     public static boolean isMatch2(String s, String p) {
         if (s == null || p == null) {
             return false;
@@ -169,106 +178,6 @@ public class Problem_0010_RegularExpressionMatching {
         }
         dp[si][pi] = 0;
         return false;
-    }
-
-    // 以下的代码是课后的优化
-    // 有代码逻辑精简的优化，还包含一个重要的枚举行为优化
-    // 请先理解课上的内容
-    public static boolean isMatch3(String s, String p) {
-        if (s == null || p == null) {
-            return false;
-        }
-        char[] str = s.toCharArray();
-        char[] pattern = p.toCharArray();
-        return isValid(str, pattern) && process3(str, pattern, 0, 0);
-    }
-
-    // 举例说明枚举行为优化
-    // 求状态(si = 3, pi = 7)时，假设状况如下
-    // str : a a a b ...
-    // si  : 3 4 5 6 ...
-    // pat : a * ? ...
-    // pi  : 7 8 9 ...
-    // 状态(si = 3, pi = 7)会依赖：
-    //   状态(si = 3, pi = 9)
-    //   状态(si = 4, pi = 9)
-    //   状态(si = 5, pi = 9)
-    //   状态(si = 6, pi = 9)
-    //
-    // 求状态(si = 2, pi = 7)时，假设状况如下
-    // str : a a a a b ...
-    // si  : 2 3 4 5 6 ...
-    // pat : a * ? ...
-    // pi  : 7 8 9 ...
-    // 状态(si = 2, pi = 7)会依赖：
-    //   状态(si = 2, pi = 9)
-    //   状态(si = 3, pi = 9)
-    //   状态(si = 4, pi = 9)
-    //   状态(si = 5, pi = 9)
-    //   状态(si = 6, pi = 9)
-    //
-    // 注意看状态(si = 2, pi = 7)依赖的后4个，其实就是状态(si = 3, pi = 7)
-    // 所以状态(si = 2, pi = 7)的依赖可以化简为：
-    //   状态(si = 2, pi = 9)
-    //   状态(si = 3, pi = 7)
-    // 这样枚举行为就被化简成了有限两个状态，详细情况看代码
-    public static boolean process3(char[] str, char[] pattern, int si, int pi) {
-        if (si == str.length && pi == pattern.length) {
-            return true;
-        }
-        if (si == str.length) {
-            return (pi + 1 < pattern.length && pattern[pi + 1] == '*') && process3(str, pattern, si, pi + 2);
-        }
-        if (pi == pattern.length) {
-            return false;
-        }
-        if (pi + 1 >= pattern.length || pattern[pi + 1] != '*') {
-            return ((str[si] == pattern[pi]) || (pattern[pi] == '.')) && process3(str, pattern, si + 1, pi + 1);
-        }
-        // 此处为枚举行为优化，含义看函数注释
-        if ((str[si] == pattern[pi] || pattern[pi] == '.') && process3(str, pattern, si + 1, pi)) {
-            return true;
-        }
-        return process3(str, pattern, si, pi + 2);
-    }
-
-    // 以下的代码是枚举行为优化后的尝试函数，改成动态规划的解
-    // 请先理解基础班中"暴力递归改动态规划"的内容
-    // 如果str长度为N，pattern长度为M，最终时间复杂度为O(N*M)
-    public static boolean isMatch4(String str, String pattern) {
-        if (str == null || pattern == null) {
-            return false;
-        }
-        char[] s = str.toCharArray();
-        char[] p = pattern.toCharArray();
-        if (!isValid(s, p)) {
-            return false;
-        }
-        int N = s.length;
-        int M = p.length;
-        boolean[][] dp = new boolean[N + 1][M + 1];
-        dp[N][M] = true;
-        for (int j = M - 1; j >= 0; j--) {
-            dp[N][j] = (j + 1 < M && p[j + 1] == '*') && dp[N][j + 2];
-        }
-        // dp[0..N-2][M-1]都等于false，只有dp[N-1][M-1]需要讨论
-        if (N > 0 && M > 0) {
-            dp[N - 1][M - 1] = (s[N - 1] == p[M - 1] || p[M - 1] == '.');
-        }
-        for (int i = N - 1; i >= 0; i--) {
-            for (int j = M - 2; j >= 0; j--) {
-                if (p[j + 1] != '*') {
-                    dp[i][j] = ((s[i] == p[j]) || (p[j] == '.')) && dp[i + 1][j + 1];
-                } else {
-                    if ((s[i] == p[j] || p[j] == '.') && dp[i + 1][j]) {
-                        dp[i][j] = true;
-                    } else {
-                        dp[i][j] = dp[i][j + 2];
-                    }
-                }
-            }
-        }
-        return dp[0][0];
     }
 
 }

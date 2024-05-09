@@ -7,11 +7,9 @@ import java.util.PriorityQueue;
 /**
  * 347. 前 K 个高频元素
  * 给你一个整数数组 nums 和一个整数 k ，请你返回其中出现频率前 k 高的元素。你可以按 任意顺序 返回答案。
- * <p>
  * 示例 1:
  * 输入: nums = [1,1,1,2,2,3], k = 2
  * 输出: [1,2]
- * <p>
  * 示例 2:
  * 输入: nums = [1], k = 1
  * 输出: [1]
@@ -21,6 +19,7 @@ public class Problem_0347_TopKFrequentElements {
     private static class Node {
         int val;
         int count;
+
         public Node(int v, int c) {
             val = v;
             count = c;
@@ -34,22 +33,22 @@ public class Problem_0347_TopKFrequentElements {
             return new int[]{};
         }
         Map<Integer, Node> map = new HashMap<>();
-        for (int i = 0; i < nums.length; i++) {
-            if (!map.containsKey(nums[i])) {
-                map.put(nums[i], new Node(nums[i], 1));
+        for (int cur : nums) {
+            if (!map.containsKey(cur)) {
+                map.put(cur, new Node(cur, 1));
             } else {
-                map.get(nums[i]).count++;
+                map.get(cur).count++;
             }
         }
-        PriorityQueue<Node> heap = new PriorityQueue<>((o1,o2) -> o1.count-o2.count);
+        PriorityQueue<Node> heap = new PriorityQueue<>((o1, o2) -> o1.count - o2.count);
         for (int key : map.keySet()) {
-            Node node = map.get(key);
+            Node cur = map.get(key);
             if (heap.size() < k) {
-                heap.add(node);
+                heap.add(cur);
             } else {
-                if (node.count > heap.peek().count) {
-                    heap.poll();
-                    heap.add(node);
+                if (cur.count > heap.peek().count) {
+                    heap.poll(); //弹出堆顶
+                    heap.add(cur);
                 }
             }
         }

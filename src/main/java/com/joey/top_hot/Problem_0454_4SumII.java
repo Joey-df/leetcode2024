@@ -28,31 +28,31 @@ import java.util.HashMap;
  */
 public class Problem_0454_4SumII {
 
+    public int fourSumCount(int[] nums1, int[] nums2, int[] nums3, int[] nums4) {
+        return func(nums1, nums2, nums3, nums4, 0);
+    }
+
     //四数相加等于target的元组个数，返回
     public static int func(int[] A, int[] B, int[] C, int[] D, int target) {
-        // key: A、B中任意两个数的sum  value: 次数
+        // key: A、B中任意两个数的累加和sum  value: 次数
         HashMap<Integer, Integer> map = new HashMap<>();
-        for (int i = 0; i < A.length; i++) {
-            for (int j = 0; j < B.length; j++) {
-                int sum = A[i] + B[j];
+        for (int a : A) {
+            for (int b : B) {
+                int sum = a + b;
                 map.put(sum, map.getOrDefault(sum, 0) + 1);
             }
         }
 
         int ans = 0;
-        for (int i = 0; i < C.length; i++) {
-            for (int j = 0; j < D.length; j++) {
-                int sum = C[i] + D[j];
+        for (int c : C) {
+            for (int d : D) {
+                int sum = c + d; //C D中任意两数之和
                 if (map.containsKey(target - sum)) {
                     ans += map.get(target - sum);
                 }
             }
         }
         return ans;
-    }
-
-    public static int fourSumCount(int[] A, int[] B, int[] C, int[] D) {
-        return func(A, B, C, D, 0);
     }
 
 }

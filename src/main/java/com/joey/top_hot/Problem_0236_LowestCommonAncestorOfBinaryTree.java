@@ -11,7 +11,7 @@ public class Problem_0236_LowestCommonAncestorOfBinaryTree {
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
         if (root == null) return null;
         HashMap<TreeNode, TreeNode> father = new HashMap<>();
-        father.put(root, null);
+        father.put(root, null); //root的父亲是null
         fillFatherMap(root, father); // important
         Set<TreeNode> set = new HashSet<>();
         set.add(p);

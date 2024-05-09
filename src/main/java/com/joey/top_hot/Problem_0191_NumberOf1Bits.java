@@ -10,14 +10,11 @@ public class Problem_0191_NumberOf1Bits {
     public static int hammingWeight(int n) {
         int ans = 0;
         while (n != 0) {
-            int ro = n & (~n + 1);
-            n ^= ro;
+            int ro = n & (~n + 1); //提取出最右侧的1
+            n ^= ro; //消掉n最右侧的1
             ans++;
         }
         return ans;
     }
 
-    public static void main(String[] args) {
-        System.out.println(hammingWeight(31));
-    }
 }

@@ -19,7 +19,7 @@ public class Problem_0134_GasStation {
             costSum += cost[i];
             tank += gas[i] - cost[i];
             if (tank < 0) {
-                start = i + 1;
+                start = i + 1; //纯能值如果小于0说明前面的位置不能跑完一周，尝试下一个出发点
                 tank = 0;
             }
         }

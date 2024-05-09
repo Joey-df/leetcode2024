@@ -1,6 +1,5 @@
 package com.joey.top_hot;
 
-import tree.TreeNode;
 
 /**
  * 687. 最长同值路径

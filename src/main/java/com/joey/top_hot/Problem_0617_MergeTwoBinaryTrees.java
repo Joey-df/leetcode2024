@@ -1,6 +1,5 @@
 package com.joey.top_hot;
 
-import tree.TreeNode;
 
 /**
  * 617. 合并二叉树

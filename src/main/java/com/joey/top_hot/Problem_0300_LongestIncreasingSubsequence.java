@@ -1,12 +1,38 @@
 package com.joey.top_hot;
 
+import java.util.Arrays;
+
 /**
  * 300. 最长递增子序列
  * 给你一个整数数组 nums ，找到其中最长严格递增子序列的长度。
  */
 public class Problem_0300_LongestIncreasingSubsequence {
 
+    //平凡解
+    //时间复杂度：O(n^2)
+    //dp[i]的含义：以i位置结尾的最长递增子序列是多长
     public static int lengthOfLIS(int[] nums) {
+        int[] dp = new int[nums.length];
+        Arrays.fill(dp, 1); //先初始化每个位置的值为1（最小是1）
+        for (int i = 1; i < nums.length; i++) {
+            // 每个位置求lis 需要枚举i前面的所有位置
+            for (int j = 0; j < i; j++) {
+                if (nums[i] > nums[j]) {
+                    dp[i] = Math.max(dp[i], dp[j] + 1);
+                }
+            }
+        }
+
+        int ans = 1;
+        for (int i = 0; i < dp.length; i++) {
+            ans = Math.max(ans, dp[i]);
+        }
+        return ans;
+    }
+
+    //最优解
+    //时间复杂度：O(nlogn)
+    public static int lengthOfLIS2(int[] nums) {
         if (nums == null || nums.length == 0) {
             return 0;
         }
@@ -37,7 +63,4 @@ public class Problem_0300_LongestIncreasingSubsequence {
         return ans;
     }
 
-    public static void main(String[] args) {
-        System.out.println(lengthOfLIS(new int[]{3,2,43,13,22}));
-    }
 }

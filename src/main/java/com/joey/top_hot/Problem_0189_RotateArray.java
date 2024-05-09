@@ -21,6 +21,8 @@ package com.joey.top_hot;
 //数组分成两部分，左右两部分互换位置
 public class Problem_0189_RotateArray {
 
+    //经典的三步逆序
+    //完美洗牌问题的原型
     public static void rotate(int[] nums, int k) {
         if (nums == null || nums.length < 2) {
             return;
@@ -41,17 +43,4 @@ public class Problem_0189_RotateArray {
         }
     }
 
-    private static void print(int[] nums) {
-        for (int i = 0; i < nums.length; i++) {
-            System.out.print(nums[i] + " ");
-        }
-        System.out.println();
-    }
-
-    public static void main(String[] args) {
-        int[] nums = new int[]{1, 2, 3, 4, 5, 6, 7};
-        int k = 3;
-        rotate(nums, k);
-        print(nums);
-    }
 }

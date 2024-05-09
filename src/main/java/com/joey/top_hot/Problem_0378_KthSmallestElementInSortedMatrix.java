@@ -2,20 +2,17 @@ package com.joey.top_hot;
 
 import java.util.PriorityQueue;
 
-/**
- * 378. 有序矩阵中第 K 小的元素
- * 给你一个 n x n 矩阵 matrix ，其中每行和每列元素均按升序排序，找到矩阵中第 k 小的元素。
- * 请注意，它是 排序后 的第 k 小元素，而不是第 k 个 不同 的元素。
- * <p>
- * 示例 1：
- * 输入：matrix = [[1,5,9],[10,11,13],[12,13,15]], k = 8
- * 输出：13
- * 解释：矩阵中的元素为 [1,5,9,10,11,12,13,13,15]，第 8 小元素是 13
- * <p>
- * 示例 2：
- * 输入：matrix = [[-5]], k = 1
- * 输出：-5
- */
+//378. 有序矩阵中第 K 小的元素
+//给你一个 n x n 矩阵 matrix ，其中每行和每列元素均按升序排序，找到矩阵中第 k 小的元素。
+//请注意，它是 排序后 的第 k 小元素，而不是第 k 个 不同 的元素。
+//你必须找到一个内存复杂度优于 O(n^2) 的解决方案。
+//提示：
+//n == matrix.length
+//n == matrix[i].length
+//1 <= n <= 300
+//-10^9 <= matrix[i][j] <= 10^9
+//题目数据 保证 matrix 中的所有行和列都按 非递减顺序 排列
+//1 <= k <= n^2
 public class Problem_0378_KthSmallestElementInSortedMatrix {
 
     private static class Node {
@@ -38,41 +35,30 @@ public class Problem_0378_KthSmallestElementInSortedMatrix {
         PriorityQueue<Node> heap = new PriorityQueue<>((o1, o2) -> o1.val - o2.val);
         int N = matrix.length;
         int M = matrix[0].length;
-        boolean[][] set = new boolean[N][M]; //不重复放的机制
+        boolean[][] visited = new boolean[N][M]; //不重复放的机制
         heap.add(new Node(matrix[0][0], 0, 0));
-        set[0][0] = true;
+        visited[0][0] = true;
         int count = 0;
         Node cur = null;
         while (!heap.isEmpty()) {
             cur = heap.poll();
+            //数够k个
             if (++count == k) {//等价于 count==k-1; count++
                 break;
             }
             int row = cur.row;
             int col = cur.col;
-            if (row + 1 < N && !set[row + 1][col]) { //下方
+            //把当前弹出元素的 下方、右方的元素，加入小根堆
+            if (row + 1 < N && !visited[row + 1][col]) { //下方
                 heap.add(new Node(matrix[row + 1][col], row + 1, col));
-                set[row + 1][col] = true;
+                visited[row + 1][col] = true;
             }
-            if (col + 1 < M && !set[row][col + 1]) { //右方
+            if (col + 1 < M && !visited[row][col + 1]) { //右方
                 heap.add(new Node(matrix[row][col + 1], row, col + 1));
-                set[row][col + 1] = true;
+                visited[row][col + 1] = true;
             }
         }
         return cur.val;
     }
-
-    public static void main(String[] args) {
-
-
-        int[][] m = new int[][]{
-                new int[]{1, 5, 9},
-                new int[]{10, 11, 13},
-                new int[]{12, 13, 15}
-        };
-        int k = 6;
-        System.out.println(kthSmallest(m, k));
-    }
-
 
 }

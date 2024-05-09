@@ -53,6 +53,7 @@ public class Problem_0015_3Sum {
                     ans.add(cur);
                 }
                 l++;
+                r--;
             }
         }
         return ans;

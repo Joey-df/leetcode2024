@@ -1,69 +1,45 @@
 package com.joey.top_hot;
 
-/**
- * 125. 验证回文串
- * 给定一个字符串，验证它是否是回文串，只考虑字母和数字字符，可以忽略字母的大小写。
- * <p>
- * 说明：本题中，我们将空字符串定义为有效的回文串。
- * <p>
- * 示例 1:
- * <p>
- * 输入: "A man, a plan, a canal: Panama"
- * 输出: true
- * 示例 2:
- * <p>
- * 输入: "race a car"
- * 输出: false
- */
+//125. 验证回文串
+//如果在将所有大写字符转换为小写字符、并移除所有非字母数字字符之后，短语正着读和反着读都一样。则可以认为该短语是一个 回文串 。
+//字母和数字都属于字母数字字符。
+//给你一个字符串 s，如果它是 回文串 ，返回 true ；否则，返回 false 。
+//
+//示例 1：
+//输入: s = "A man, a plan, a canal: Panama"
+//输出：true
+//解释："amanaplanacanalpanama" 是回文串。
 public class Problem_0125_ValidPalindrome {
 
-    // 忽略空格、忽略大小写 -> 是不是回文
-    // 数字不在忽略大小写的范围内
     public static boolean isPalindrome(String s) {
-        if (s == null || s.length() == 0) {
-            return true;
-        }
-        char[] str = s.toLowerCase().toCharArray();
-        int L = 0;
-        int R = str.length - 1;
-        while (L < R) {
-            // 英文（大小写） + 数字
-            if (validChar(str[L]) && validChar(str[R])) { //l r 都合法
-                if (str[L] != str[R]) {
-                    return false;
-                } else {
-                    L++;
-                    R--;
-                }
-            } else { // l r不都合法，三种情况：l合法；r合法；l r都不合法
-                L += validChar(str[L]) ? 0 : 1;
-                R -= validChar(str[R]) ? 0 : 1;
+        if (s == null || s.length() == 0) return true;
+        char[] str = s.toCharArray();
+        //预处理一下
+        StringBuilder builder = new StringBuilder();
+        for (char c : str) {
+            if (c >= 'a' && c <= 'z') {
+                builder.append(c);
+            }
+            if (c >= '0' && c <= '9') {
+                builder.append(c);
+            }
+            if (c >= 'A' && c <= 'Z') {
+                builder.append((char) (c + 32)); //to lower case
             }
         }
-        return true;
+        return judge(builder.toString().toCharArray());
     }
 
-    public static boolean validChar(char c) {
-        return isLetter(c) || isNumber(c);
-    }
-
-    public static boolean equal(char c1, char c2) {
-        if (isNumber(c1) || isNumber(c2)) {
-            return c1 == c2;
+    public static boolean judge(char[] arr) {
+        if (arr == null || arr.length == 0) return true;
+        int l = 0, r = arr.length - 1;
+        while (l <= r) {
+            if (arr[l] != arr[r]) {
+                return false;
+            }
+            l++;
+            r--;
         }
-        // a  A  相差 32
-        // b  B   32
-        // c  C   32
-        return (c1 == c2) || (Math.max(c1, c2) - Math.min(c1, c2) == 32);
-    }
-
-    //判断给定字符，是否是合法的英文字符
-    public static boolean isLetter(char c) {
-        return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
-    }
-
-    //判断给定的字符是否是合法的数字字符
-    public static boolean isNumber(char c) {
-        return (c >= '0' && c <= '9');
+        return true;
     }
 }

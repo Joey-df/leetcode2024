@@ -17,24 +17,27 @@ public class Problem_0238_ProductOfArrayExceptSelf {
     //3、如果nums中无0，每个位置的值=所有元素累成积 / 当前位置元素
     public int[] productExceptSelf(int[] nums) {
         int zeros = 0;
+        //先遍历一遍，统计0的个数
         for (int n : nums) {
             if (n == 0) zeros++;
         }
         int[] ans = new int[nums.length];
+        //如果0的个数>=2，结果全0，直接返回
         if (zeros > 1) {
             return ans;
         }
+        //一个0，则0的位置有值，其他位置全0
         if (zeros == 1) {
-            int tmp = 1;
-            int index = 0; //nums中0的下表
+            int indexZeroRes = 1;
+            int index = 0; //nums中0的下标
             for (int i = 0; i < nums.length; i++) {
                 if (nums[i] != 0) {
-                    tmp *= nums[i];
+                    indexZeroRes *= nums[i];
                 } else {
-                    index = i;
+                    index = i; //找到元素为0的下标
                 }
             }
-            ans[index] = tmp;
+            ans[index] = indexZeroRes;
             return ans;
         }
         //无0

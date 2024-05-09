@@ -33,21 +33,22 @@ import java.util.HashMap;
 public class Problem_0166_FractionToRecurringDecimal {
 
     public static String fractionToDecimal(int numerator, int denominator) {
+        //分子为0，直接返回"0"
         if (numerator == 0) {
             return "0";
         }
         StringBuilder res = new StringBuilder();
-        // "+" or "-"
+        // 添加符号 "+" or "-"
         res.append(((numerator > 0) ^ (denominator > 0)) ? "-" : "");
-        long num = Math.abs((long) numerator);
-        long den = Math.abs((long) denominator);
-        // integral part
+        long num = Math.abs((long) numerator); //分子
+        long den = Math.abs((long) denominator); //分母
+        // integral part（整除的部分）
         res.append(num / den);
         num %= den;
-        if (num == 0) {
+        if (num == 0) { //如果取模结果为0说明可以整除，直接返回
             return res.toString();
         }
-        // fractional part
+        // fractional part（小数部分）
         res.append(".");
         HashMap<Long, Integer> map = new HashMap<Long, Integer>();
         map.put(num, res.length());
@@ -55,20 +56,16 @@ public class Problem_0166_FractionToRecurringDecimal {
             num *= 10;
             res.append(num / den);
             num %= den;
-            if (map.containsKey(num)) {
+            if (map.containsKey(num)) { //代表开始重复，出现循环节，找出num出现的位置，添加左括号，结束
                 int index = map.get(num);
                 res.insert(index, "(");
                 res.append(")");
                 break;
             } else {
-                map.put(num, res.length());
+                map.put(num, res.length()); //记录此时的余数出现在啥位置
             }
         }
         return res.toString();
-    }
-
-    public static void main(String[] args) {
-        System.out.println(fractionToDecimal(127, 999));
     }
 
 }

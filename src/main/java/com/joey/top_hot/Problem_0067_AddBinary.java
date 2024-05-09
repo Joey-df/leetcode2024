@@ -15,21 +15,23 @@ package com.joey.top_hot;
 //和leetcode2同类型的题
 public class Problem_0067_AddBinary {
 
+    //潜台词：a b都不为空
     public static String addBinary(String a, String b) {
-        assert (a != null && a.length() > 0 && b != null && b.length() > 0);
         char[] str1 = a.toCharArray();
         char[] str2 = b.toCharArray();
+        reverse(str1);
+        reverse(str2);
         int N = str1.length;
         int M = str2.length;
-        int i = N - 1;
-        int j = M - 1;
+        int i = 0;
+        int j = 0;
         int carry = 0;
         int sum = 0; //每一步的sum
         StringBuilder sb = new StringBuilder();
-        while (i >= 0 || j >= 0) {
+        while (i < N || j < M) {
             sum = carry;
-            sum += (i >= 0) ? (str1[i--] - '0') : 0;
-            sum += (j >= 0) ? (str2[j--] - '0') : 0;
+            sum += (i < N) ? (str1[i++] - '0') : 0;
+            sum += (j < M) ? (str2[j++] - '0') : 0;
             sb.append(sum % 2);
             carry = sum / 2;
         }
@@ -39,7 +41,18 @@ public class Problem_0067_AddBinary {
         return sb.reverse().toString();
     }
 
-    public static void main(String[] args) {
-        System.out.println(addBinary("11","1"));
+    private static void reverse(char[] str) {
+        int l = 0;
+        int r = str.length - 1;
+        while (l < r) {
+            swap(str, l++, r--);
+        }
     }
+
+    private static void swap(char[] str, int i, int j) {
+        char t = str[i];
+        str[i] = str[j];
+        str[j] = t;
+    }
+
 }
