@@ -23,28 +23,26 @@ public class Problem_0605_CanPlaceFlowers {
     //整体思路：
     //从左往后遍历，如果当前位置的值为0，考虑pre和next是否同时为0，如果同时为0则可以种花，并把值改为1
     //需要注意0、n-1两个位置边界（0的pre认为是0，n-1的next认为是0）
-    public static boolean canPlaceFlowers(int[] flowerbed, int n) {
-        if (flowerbed == null || flowerbed.length == 0 || n < 0) {
-            return false;
+    public static boolean canPlaceFlowers(int[] flowerbed, int k) {
+        //1 <= flowerbed.length <= 2 * 10^4
+        int n = flowerbed.length;
+        int[] arr = new int[n + 2];
+        for (int i = 0; i < n; i++) {
+            arr[i + 1] = flowerbed[i];
         }
-        //[1,0,1,0,1,0,1]
-        //0
+        int m = arr.length;
+        int pre = 0;
+        int next;
         int count = 0;
-        int len = flowerbed.length;
-        for (int i = 0; i < len; i++) {
-            if (flowerbed[i] == 0) {
-                //考虑两个边界情况：
-                //第一个位置没有左边(认为左边为0)
-                //最后一个位置没有右边(认为右边为0)
-                int pre = i == 0 ? 0 : flowerbed[i - 1]; // 当前i位置的前一个位置
-                int next = i == len - 1 ? 0 : flowerbed[i + 1]; // 当前i位置的后一个位置
-                if (pre == 0 && next == 0) {
-                    count++;
-                    flowerbed[i] = 1;
-                }
+        for (int i = 1; i < m - 1; i++) {
+            next = arr[i + 1];
+            if (pre == 0 && next == 0 && arr[i] == 0) {
+                count++;
+                arr[i] = 1;
             }
+            pre = arr[i];
         }
-        return count >= n; //能种下的花是否大于等于n
+        return count >= k;
     }
 
 }

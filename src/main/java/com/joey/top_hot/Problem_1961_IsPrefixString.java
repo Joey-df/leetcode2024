@@ -21,24 +21,24 @@ package com.joey.top_hot;
 public class Problem_1961_IsPrefixString {
 
     public boolean isPrefixString(String s, String[] words) {
-        int n = s.length();
-        int i = 0; // 当前要处理的s中的位置
-        char[] str = s.toCharArray();
+        //思路
+        //对s使用一个p指向当前处理到的位置
+        //遍历words单词表，对于每一个单词word，和s[p]比较，看能够完全对上，并且p到越界位置了，words中某个word也同步到了越界位置
+        //这两个条件同时满足，才能返回true
+        char[] arr = s.toCharArray();
+        int p = 0;
         for (String word : words) {
-            char[] w = word.toCharArray();
-            for (int j = 0; j < w.length; j++) {
-                if (i < n && str[i] == w[j]) {
-                    i++;
-                } else { //i越界 或者 str[i] != w[j]
+            char[] cur = word.toCharArray();
+            for (int i = 0; i < cur.length; i++) {
+                //遍历到某一个单词，单词还没到结尾，s先消耗完了，false
+                if (p == arr.length || arr[p++] != cur[i]) {
                     return false;
                 }
             }
-            //一个单词遍历完了，如果i来到越界位置，说明合法
-            if (i == n) {
+            if (p == arr.length) {
                 return true;
             }
         }
-        //走到这里，说明所有字符串都处理完了，但i还没到越界位置
         return false;
     }
 

@@ -33,17 +33,14 @@ public class Problem_2486_AppendCharacters {
     //时间复杂度：O(min(n,m))，其中 n 为 s 的长度，m 为 t 的长度。
     //空间复杂度：O(1)，仅用到若干额外变量。
     public int appendCharacters(String s, String t) {
-        int j = 0;
-        int n = s.length(); // s的长度
-        int m = t.length(); // t的长度
-        //遍历s，s[i]==t[j]时，j++
-        //s、t任何一个越界了停
-        for (int i = 0; i < n && j < m; i++) {
+        int n = s.length();
+        int m = t.length();
+        int i = 0, j = 0;
+        for (; i < n & j < m; i++) {
             if (s.charAt(i) == t.charAt(j)) {
                 j++;
             }
         }
-        //此时t[j...]的长度就是答案
         return m - j;
     }
 
