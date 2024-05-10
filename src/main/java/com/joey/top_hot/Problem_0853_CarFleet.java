@@ -41,27 +41,27 @@ import java.util.Arrays;
 //0 < speed[i] <= 10^6
 public class Problem_0853_CarFleet {
 
+    //一辆车永远不会超过前面的另一辆车，但它可以追上去，并与前车 以相同的速度 紧接着行驶。
+    //这句话很重要，最终车队会碰撞在一起形成几个团，最终求的就是团的数量
+    //1 <= n <= 10^5这个数据限制，O(n^2)肯定不行，需要寻找O(nlogn) 或者O(n)的 解
+    //题目给定的position是乱序的，需要先排序
     public int carFleet(int target, int[] position, int[] speed) {
         int n = position.length;
         int[][] arr = new int[n][2];
         for (int i = 0; i < n; i++) {
-            arr[i][0] = position[i];
-            arr[i][1] = speed[i];
+            arr[i] = new int[]{position[i], speed[i]};
         }
-        Arrays.sort(arr, (a, b) -> a[0] - b[0]); // 按照position排序
+        Arrays.sort(arr, (a, b) -> a[0] - b[0]);
         int ans = 0;
-        //从右往左遍历
-        //也可以使用while
         for (int i = n - 1; i >= 0; ) {
-            int[] cur = arr[i];
-            double t = (target - cur[0]) * 1.0 / cur[1]; //当前车到达目的地需要的时间
+            int[] cur = arr[i]; //领头车
+            double time = (target - cur[0]) * 1.0 / cur[1];//领头车到达终点的时间
             int j = i - 1;
-            //如果当前车到达目的地需要的时间<=领头车，则会合为一个车队
-            while (j >= 0 && (target - arr[j][0]) * 1.0 / arr[j][1] <= t) {
+            while (j >= 0 && (target - arr[j][0]) * 1.0 / arr[j][1] <= time) {
                 j--;
             }
-            i = j; //此时发现了一个车队，i指向j，开始下一轮寻找
-            ans++;
+            ans++;//发现一个车队
+            i = j; //下一轮寻找
         }
         return ans;
     }

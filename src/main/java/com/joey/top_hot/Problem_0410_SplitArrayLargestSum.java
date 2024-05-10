@@ -5,6 +5,7 @@ package com.joey.top_hot;
 // 你需要将这个数组分成 m 个非空的连续子数组。
 // 设计一个算法使得这 m 个子数组各自和的最大值最小。
 // 测试链接 : https://leetcode.cn/problems/split-array-largest-sum/
+// 此问题还有dp的解法(四边形不等式优化)，在体系学习班里有讲
 public class Problem_0410_SplitArrayLargestSum {
 
 	// 时间复杂度O(n * log(sum))，额外空间复杂度O(1)
