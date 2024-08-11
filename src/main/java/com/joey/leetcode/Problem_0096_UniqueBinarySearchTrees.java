@@ -22,9 +22,9 @@ package com.joey.leetcode;
  */
 public class Problem_0096_UniqueBinarySearchTrees {
 
-//    public int numTrees(int n) {
-//
-//    }
+    public int numTrees(int n) {
+        return fun(n);
+    }
 
     //递归含义：
     //val连续的n个节点，可以组成多少种不同的BST，返回

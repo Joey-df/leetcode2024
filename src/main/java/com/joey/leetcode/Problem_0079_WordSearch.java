@@ -10,16 +10,19 @@ package com.joey.leetcode;
 //{ 'f', 'e', 'o' }
 //}
 //不可以走重复路的情况下，返回能不能找到
-//比如，word = "zoooz"，是不可以找到的，因为允许走一条路径中已经走过的字符不能重复走
+//比如，word = 'zoooz'，是不可以找到的，因为允许走一条路径中已经走过的字符不能重复走
 public class Problem_0079_WordSearch {
 
-    public boolean exist(char[][] board, String word) {
-        if (board == null || board.length == 0 || board[0].length == 0) {
-            return false;
-        }
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[0].length; j++) {
-                if (fun(board, i, j, word.toCharArray(), 0)) {
+    public static boolean exist(char[][] board, String word) {
+        int n = board.length;
+        if (n == 0) return false;
+        int m = board[0].length;
+        if (m == 0) return false;
+        char[] str = word.toCharArray();
+        boolean[][] visited = new boolean[n][m];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (can(board, i, j, str, 0, visited)) {
                     return true;
                 }
             }
@@ -27,27 +30,36 @@ public class Problem_0079_WordSearch {
         return false;
     }
 
-
-    //递归含义：
-    //从(i,j)出发能不能走出word[k...]，word[...k-1]都不用再考虑了
-    private boolean fun(char[][] board, int i, int j, char[] word, int k) {
-        if (k == word.length) return true;
-        if (i < 0 || i >= board.length || j < 0 || j >= board[0].length) {
+    //从[i,j]开始能不能走出word[k...]
+    public static boolean can(char[][] board, int i, int j, char[] word, int k, boolean[][] visited) {
+        int n = board.length;
+        int m = board[0].length;
+        if (k == word.length) {
+            //如果走到了word的越界位置，说明能走出来
+            return true;
+        }
+        if (i < 0 || i >= n || j < 0 || j >= m || board[i][j] != word[k] || visited[i][j]) {
+            //走到board外面去了，或者board[i][j] != word[k]，说明走不出来
             return false;
         }
-        //(i,j)不越界
-        if (board[i][j] != word[k]) {
-            return false;
-        }
-        // board[i][j] == word[k]
-        char c = board[i][j];
-        board[i][j] = '0';
-        boolean ans = fun(board, i - 1, j, word, k + 1) ||
-                fun(board, i + 1, j, word, k + 1) ||
-                fun(board, i, j - 1, word, k + 1) ||
-                fun(board, i, j + 1, word, k + 1);
-        board[i][j] = c; //恢复
+        //board[i][j] == word[k]
+        visited[i][j] = true;
+        boolean ans = can(board, i - 1, j, word, k + 1, visited)
+                || can(board, i + 1, j, word, k + 1, visited)
+                || can(board, i, j - 1, word, k + 1, visited)
+                || can(board, i, j + 1, word, k + 1, visited);
+        visited[i][j] = false;
         return ans;
     }
 
+    public static void main(String[] args) {
+        //board = [['A','B','C','E'],['S','F','C','S'],[S','F','C','S']], word = 'ABCCED'
+        char[][] board = new char[][]{
+                {'A', 'B', 'C', 'E'},
+                {'S', 'F', 'C', 'S'},
+                {'A', 'D', 'E', 'E'}
+        };
+        String word = "ABCCED";
+        System.out.println(exist(board, word));
+    }
 }

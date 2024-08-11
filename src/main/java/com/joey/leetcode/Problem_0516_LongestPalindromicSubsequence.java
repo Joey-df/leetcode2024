@@ -6,6 +6,8 @@ package com.joey.leetcode;
 //manacher
 public class Problem_0516_LongestPalindromicSubsequence {
 
+    //区间dp
+    //范围上的尝试模型
     public int longestPalindromeSubseq(String s) {
         if (s == null || "".equals(s)) return 0;
         char[] str = s.toCharArray();
@@ -21,9 +23,10 @@ public class Problem_0516_LongestPalindromicSubsequence {
         //普遍位置
         for (int i = n - 3; i >= 0; i--) {
             for (int j = i + 2; j < n; j++) {
-                dp[i][j] = Math.max(dp[i + 1][j - 1], Math.max(dp[i][j - 1], dp[i + 1][j]));
                 if (str[i] == str[j]) {
-                    dp[i][j] = Math.max(dp[i][j], dp[i + 1][j - 1] + 2);
+                    dp[i][j] = Math.max(dp[i][j], dp[i + 1][j - 1] + 2); //左下角
+                } else {
+                    dp[i][j] = Math.max(dp[i + 1][j], dp[i][j - 1]); //下 上
                 }
             }
         }

@@ -1,6 +1,7 @@
 package com.joey.leetcode;
 
 
+import java.util.Iterator;
 import java.util.Stack;
 
 /**
@@ -25,7 +26,7 @@ public class Problem_0739_DailyTemperatures {
 
     //求每个位置右边离自己最近比自己大的数，使用单调栈
     //单调栈：自底向上，大 -> 小
-    public int[] dailyTemperatures(int[] temperatures) {
+    public int[] dailyTemperatures1(int[] temperatures) {
         if (temperatures == null || temperatures.length == 0) {
             return new int[0];
         }
@@ -43,5 +44,39 @@ public class Problem_0739_DailyTemperatures {
             ans[stack.pop()] = 0;
         }
         return ans;
+    }
+
+    public static int[] dailyTemperatures(int[] temperatures) {
+        int n = temperatures.length;
+        int[] help = new int[n];
+        Stack<Integer> stack = new Stack<>();
+        for (int i = 0; i < n; i++) {
+            while (!stack.isEmpty() && temperatures[i] >= temperatures[stack.peek()]) {
+                int curri = stack.pop();
+                help[curri] = i;
+            }
+            stack.push(i);
+        }
+        //清算
+        while (!stack.isEmpty()) {
+            int curri = stack.pop();
+            help[curri] = -1;
+        }
+        //修正
+        for (int i = n - 1; i >= 0; i--) {
+            if (help[i] != -1 && temperatures[i] == temperatures[help[i]]) {
+                help[i] = help[help[i]];
+            }
+        }
+        int[] ans = new int[n];
+        for (int i = 0; i < n; i++) {
+            ans[i] = help[i] == -1 ? 0 : help[i] - i;
+        }
+        return ans;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = new int[] {1,2,4,4,6};
+        System.out.println(dailyTemperatures(arr));
     }
 }

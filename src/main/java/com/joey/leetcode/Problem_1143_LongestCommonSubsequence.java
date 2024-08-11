@@ -24,9 +24,10 @@ public class Problem_1143_LongestCommonSubsequence {
         //普遍位置
         for (int i = 1; i < n; i++) {
             for (int j = 1; j < m; j++) {
-                dp[i][j] = Math.max(dp[i - 1][j - 1], Math.max(dp[i - 1][j], dp[i][j - 1]));
                 if (str1[i] == str2[j]) {
-                    dp[i][j] = Math.max(dp[i][j], dp[i - 1][j - 1] + 1);
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                } else {
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
                 }
             }
         }
