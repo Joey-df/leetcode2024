@@ -1,6 +1,8 @@
 package com.joey.leetcode;
 
-// 戳气球
+import java.util.Arrays;
+
+// 312.戳气球
 // 有 n 个气球，编号为0到n-1，每个气球上都标有一个数字，这些数字存在数组nums中
 // 现在要求你戳破所有的气球。戳破第 i 个气球
 // 你可以获得 nums[i - 1] * nums[i] * nums[i + 1] 枚硬币
@@ -12,11 +14,8 @@ public class Problem_0312_BurstBalloons {
 
     // 需要添加外部信息的dp
     // 记忆化搜索
-    public static int maxCoins1(int[] nums) {
+    public static int maxCoins(int[] nums) {
         int n = nums.length;
-        // a b c d e
-        // 首位补1得到：
-        // 1 a b c d e 1
         int[] arr = new int[n + 2];
         arr[0] = 1;
         arr[n + 1] = 1;
@@ -24,42 +23,44 @@ public class Problem_0312_BurstBalloons {
             arr[i + 1] = nums[i];
         }
         int[][] dp = new int[n + 2][n + 2];
-        for (int i = 1; i <= n; i++) {
-            for (int j = i; j <= n; j++) {
-                dp[i][j] = -1;
-            }
+        for (int i = 0; i < n + 2; i++) {
+            Arrays.fill(dp[i], -1);
         }
-        return func(arr, 1, n, dp);
+        return fun(arr, 1, n, dp);
     }
 
-    // arr[l...r]这些气球决定一个顺序，获得最大得分返回！
-    // 一定有 : arr[l-1]一定没爆！
-    // 一定有 : arr[r+1]一定没爆！
-    // 尝试每个气球最后打爆
-    public static int func(int[] arr, int l, int r, int[][] dp) {
+    //返回arr[l,r]范围上戳气球的最大得分
+    //枚举每个位置的气球最后爆
+    //一定有arr[l-1]没爆
+    //一定有arr[r+1]没爆
+    public static int fun(int[] arr, int l, int r, int[][] dp) {
+        if (l > r) return 0;
         if (dp[l][r] != -1) {
             return dp[l][r];
         }
-        int ans;
+        int ans = Integer.MIN_VALUE;
         if (l == r) {
-            ans = arr[l - 1] * arr[l] * arr[r + 1];
+            ans = arr[l] * arr[l - 1] * arr[r + 1];
         } else {
-            // l   ....r
-            // l +1 +2 .. r
-            // l位置的气球最后打爆
-            ans = arr[l - 1] * arr[l] * arr[r + 1] + func(arr, l + 1, r, dp);
-            // r位置的气球最后打爆
-            ans = Math.max(ans, arr[l - 1] * arr[r] * arr[r + 1] + func(arr, l, r - 1, dp));
-            for (int k = l + 1; k < r; k++) {
-                // k位置的气球最后打爆
-                // [l...k-1]  k  [k+1...r]
-                int cur = func(arr, l, k - 1, dp) + func(arr, k + 1, r, dp) + arr[l - 1] * arr[k] * arr[r + 1];
+            //l < r
+            for (int k = l; k <= r; k++) { //枚举每个最后爆的位置
+                int cur = arr[k] * arr[l - 1] * arr[r + 1] + fun(arr, l, k - 1, dp) + fun(arr, k + 1, r, dp);
                 ans = Math.max(ans, cur);
             }
         }
-        //加缓存
         dp[l][r] = ans;
         return ans;
+    }
+
+    public static void main(String[] args) {
+//        String s = "enn";
+        String s = "arn";
+        int ans=0;
+
+        for (int i = 0; i < s.length(); i++) {
+            ans += s.charAt(i);
+        }
+        System.out.println(ans);
     }
 
 }

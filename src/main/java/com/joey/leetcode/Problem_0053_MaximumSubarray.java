@@ -5,20 +5,29 @@ package com.joey.leetcode;
 //子数组，是数组中的一个连续部分。
 public class Problem_0053_MaximumSubarray {
 
-    public int maxSubArray(int[] arr) {
-        if (arr == null || arr.length == 0) return 0;
+    public int maxSubArray1(int[] arr) {
         int n = arr.length;
         int[] dp = new int[n];
         dp[0] = arr[0];
-        int ans = dp[0];
+        int ans = arr[0];
         for (int i = 1; i < n; i++) {
-            int p1 = arr[i]; // 只包含i位置
-            int p2 = arr[i] + dp[i - 1];
-            dp[i] = Math.max(p1, p2);
+            dp[i] = Math.max(arr[i], arr[i] + dp[i - 1]);
             ans = Math.max(ans, dp[i]);
         }
         return ans;
     }
 
+    //空间压缩
+    public int maxSubArray(int[] arr) {
+        int n = arr.length;
+        int pre = arr[0];
+        int ans = arr[0];
+        for (int i = 1; i < n; i++) {
+            int cur = Math.max(arr[i], arr[i] + pre);
+            ans = Math.max(ans, cur);
+            pre = cur;
+        }
+        return ans;
+    }
 
 }
