@@ -10,7 +10,7 @@ public class Problem_0042_TrappingRainWater {
 
     // 预处理数组：先依次生成左边的最大值，右边的最大值数组，两个数组
     // 撸一遍结算答案
-    public int trap(int[] arr) {
+    public int trap1(int[] arr) {
         if (arr == null || arr.length < 3) return 0;
         int n = arr.length;
         int[] maxLeft = new int[n];
@@ -25,6 +25,27 @@ public class Problem_0042_TrappingRainWater {
         int ans = 0;
         for (int i = 1; i < n - 1; i++) {
             ans += Math.max(0, Math.min(maxLeft[i], maxRight[i]) - arr[i]);
+        }
+        return ans;
+    }
+
+    //双指针，配合单调性分析
+    public int trap(int[] arr) {
+        //0、n-1位置不可能留下水
+        int n = arr.length;
+        int l = 1;
+        int r = n - 2;
+        int lmax = arr[0];
+        int rmax = arr[n - 1];
+        int ans = 0;
+        while (l <= r) {
+            if (lmax <= rmax) {
+                ans += Math.max(0, lmax - arr[l]);
+                lmax = Math.max(lmax, arr[l++]);
+            } else {
+                ans += Math.max(0, rmax - arr[r]);
+                rmax = Math.max(rmax, arr[r--]);
+            }
         }
         return ans;
     }

@@ -22,18 +22,18 @@ public class Problem_0287_FindTheDuplicateNumber {
         if (nums == null || nums.length < 2) {
             return -1;
         }
-        //可以想象0是链表的头节点
-        int slow = nums[0];
-        int fast = nums[nums[0]];
-        while (slow != fast) {
-            slow = nums[slow];
-            fast = nums[nums[fast]];
+        //想象0是链表的头结点
+        int s = nums[0];
+        int f = nums[nums[0]];
+        while (s != f) {
+            s = nums[s];
+            f = nums[nums[f]];
         }
-        fast = 0;
-        while (slow != fast) {
-            fast = nums[fast];
-            slow = nums[slow];
+        f = 0;
+        while (s != f) {
+            s = nums[s];
+            f = nums[f];
         }
-        return slow;
+        return s;
     }
 }
