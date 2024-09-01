@@ -22,23 +22,16 @@ import java.util.Arrays;
 public class Problem_0179_LargestNumber {
 
     public static String largestNumber(int[] nums) {
-        assert (nums != null && nums.length > 0);
-        //先把整形数组变为字符串数组
-        String[] arr = new String[nums.length];
-        for (int i = 0; i < arr.length; i++) {
+        int n = nums.length;
+        String[] arr = new String[n];
+        for (int i = 0; i < n; i++) {
             arr[i] = String.valueOf(nums[i]);
         }
-        // 降序排序，按照字典顺序比较ab与ba
-        Arrays.sort(arr, (a, b) -> (b + a).compareTo(a + b)); //字典序降序
-
-        //处理异常case
-        if ("0".equals(arr[0])) {
-            return "0";
-        }
-
+        Arrays.sort(arr, (a, b) -> (b+a).compareTo(a+b));
+        if (arr[0].equals("0")) return "0";
         StringBuilder sb = new StringBuilder();
-        for (String cur : arr) {
-            sb.append(cur);
+        for (int i = 0; i < n; i++) {
+            sb.append(arr[i]);
         }
         return sb.toString();
     }

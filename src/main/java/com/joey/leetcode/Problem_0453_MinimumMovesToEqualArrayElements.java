@@ -13,27 +13,27 @@ package com.joey.leetcode;
 //孪生题：leetcode 462
 public class Problem_0453_MinimumMovesToEqualArrayElements {
 
-    //数学解
-    //int n = nums.length;
-    //min: nums中的最小值
-    //sum: 移动前的总和
-    //总共操作m次: ans
-    //每次操作使得n-1个数 +1
-    //x: 经过m次操作，nums中的每个元素最终都会变成x （x = min+m）即最小值添加m次=x
-    //sum + m * (n-1) = n * x
-    //sum + m * (n-1) = n * (min+m)
-    //sum - m = n * min
-    //m = sum - n * min
+    //假设最后每个元素都变成x，则最小值每次都要+1
+    //数组中的最小值为min，则操作次数为x-min
+    //初始数组的累加和为sum
+    //假设需要操作m次
+    //sum + m*(n-1) = x*n
+    //m=x-min
+    //带入：sum + (x-min)*(n-1) = x*n
+    //sum -x -min*n +min = 0
+    // x = sum - min*(n-1)
+    // ans = x-min
+    //     = sum -min*n +min -min
+    //     = sum -min*n
     public int minMoves(int[] nums) {
-        if (nums == null || nums.length == 0) return 0;
         int n = nums.length;
         int min = Integer.MAX_VALUE;
         int sum = 0;
-        for (int num : nums) {
-            min = Math.min(min, num);
+        for (int num: nums) {
             sum += num;
+            min = Math.min(min, num);
         }
-        return sum - n * min;
+        return sum - min * n;
     }
 
 }
