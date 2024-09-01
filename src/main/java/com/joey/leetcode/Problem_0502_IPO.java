@@ -30,7 +30,8 @@ public class Problem_0502_IPO {
         while (k > 0) {
             //先从小根堆里解锁能做的项目，入大根堆
             while (!minHeap.isEmpty() && w >= minHeap.peek()[1]) {
-                maxHeap.offer(minHeap.poll());
+                int[] curr = minHeap.poll();
+                maxHeap.offer(curr);
             }
             //从大根堆中取出收益最大的项目，做一次
             if (maxHeap.isEmpty()) {
