@@ -1,9 +1,8 @@
 package com.joey.leetcode;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 //315. 计算右侧小于当前元素的个数
 //给定一个整数数组 nums，按要求返回一个新数组 counts。
@@ -21,80 +20,71 @@ import java.util.List;
 //-10^4 <= nums[i] <= 10^4
 public class Problem_0315_CountOfSmallerNumbersAfterSelf {
 
-    private static class Node {
-        int value;
-        int index;
-        int countOfSmallerAfterSelf;
+    static class Info {
+        int i;
+        int val;
+        int count;
 
-        public Node(int value, int index) {
-            this.value = value;
-            this.index = index;
-            this.countOfSmallerAfterSelf = 0;
+        public Info(int i, int val, int count) {
+            this.i = i;
+            this.val = val;
+            this.count = count;
         }
     }
 
+    //归并分治
     public static List<Integer> countSmaller(int[] nums) {
-        Node[] wrapNums = new Node[nums.length];
-        for (int i = 0; i < nums.length; i++) {
-            wrapNums[i] = new Node(nums[i], i);
+        int n = nums.length;
+        Info[] infos = new Info[n];
+        for (int i = 0; i < n; i++) {
+            infos[i] = new Info(i, nums[i], 0);
         }
+        fun(infos, 0, n - 1);
+        Arrays.sort(infos, (a, b) -> a.i - b.i);
+        return Arrays.stream(infos).map(a -> a.count).collect(Collectors.toList());
+    }
 
-        //接下来对wrapNums进行排序，排序过程中压榨出右边小于自己的个数
-        sort(wrapNums, 0, wrapNums.length - 1);
-        //至此 wrapNums中的原始是按照value排好序的，需要还原成原始nums中的顺序
-        List<Integer> ans = new ArrayList<>();
-        Arrays.sort(wrapNums, new Comparator<Node>() {
-            @Override
-            public int compare(Node o1, Node o2) {
-                return o1.index - o2.index;
+    //函数功能
+    //求出arr[l,r]上每个位置右边比自己小的元素个数
+    //并且完事之后，数组在val层面上变有序
+    public static void fun(Info[] arr, int l, int r) {
+        if (l == r) {
+            return;
+        }
+        int m = l + (r - l) / 2;
+        fun(arr, l, m);
+        fun(arr, m + 1, r);
+        merge(arr, l, m, r);
+    }
+
+    //arr[l,m]
+    //arr[m+1,r]在val层面上已经变有序
+    private static void merge(Info[] arr, int l, int m, int r) {
+        //统计部分
+        //2 5    1 6
+        int ri = m + 1;
+        for (int i = l; i <= m; i++) { //更新左半区的答案
+            while (ri <= r && arr[ri].val < arr[i].val) {
+                ri++;
             }
-        });
-        for (int i = 0; i < wrapNums.length; i++) {
-            ans.add(wrapNums[i].countOfSmallerAfterSelf);
+            //更新i位置的答案
+            arr[i].count += ri - (m + 1);
         }
-        return ans;
-    }
-
-    //对wrapNums[L,R]范围上进行归并排序
-    private static void sort(Node[] wrapNums, int L, int R) {
-        if (L >= R) return;
-        //L>R
-        int mid = L + ((R - L) >> 1);
-        sort(wrapNums, L, mid);
-        sort(wrapNums, mid + 1, R);
-        merge(wrapNums, L, mid, R);
-    }
-
-    //对wrapNums[L,R]范围上进行merge
-    //wrapNums[L,mid]，wrapNums[mid+1,R]范围上均已经有序了
-    private static void merge(Node[] wrapNums, int l, int mid, int r) {
-        Node[] help = new Node[r - l + 1];
-        int idx = r - l;//help专用 初始指向最后一个位置
-        //从右往左遍历，左边>右边的时候产生答案
-        int p1 = mid, p2 = r;
-        while (p1 >= l && p2 >= mid + 1) {
-            if (wrapNums[p1].value > wrapNums[p2].value) { //左边大先拷贝左边的
-                help[idx--] = wrapNums[p1];
-                wrapNums[p1--].countOfSmallerAfterSelf += (p2 - mid);
-            } else { //右边>=左边
-                help[idx--] = wrapNums[p2--];
-            }
+        //归并排序部分
+        Info[] help = new Info[r - l + 1];
+        int a = l;
+        int b = m + 1;
+        int ci = 0;
+        while (a <= m && b <= r) {
+            help[ci++] = arr[a].val <= arr[b].val ? arr[a++] : arr[b++];
         }
-        while (p1 >= l) {
-            help[idx--] = wrapNums[p1--];
-        }
-
-        while (p2 >= mid + 1) {
-            help[idx--] = wrapNums[p2--];
-        }
-
-        for (int i = 0; i < help.length; i++) { //刷回去
-            wrapNums[i + l] = help[i];
+        while (a <= m) help[ci++] = arr[a++];
+        while (b <= r) help[ci++] = arr[b++];
+        //刷回去
+        for (int i = 0; i < r - l + 1; i++) {
+            arr[i + l] = help[i];
         }
     }
 
 
-    public static void main(String[] args) {
-        System.out.println(countSmaller(new int[]{5, 2, 6, 1}));
-    }
 }

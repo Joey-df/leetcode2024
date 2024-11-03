@@ -9,30 +9,28 @@ package com.joey.leetcode;
 //返回其长度。如果不存在符合条件的子数组，返回 0 。
 public class Problem_0209_MinimumSizeSubarraySum {
 
-    // 1，2，4，5，6， target=5
-    public static int minSubArrayLen(int target, int[] nums) {
+    //正数数组，范围越大，累加和只会变大，存在单调性
+    //so 滑动窗口
+    public int minSubArrayLen(int target, int[] nums) {
         int n = nums.length;
-        int l=0;
-        int r=0; // [l,r)
-        int sum=0;
         int ans = Integer.MAX_VALUE;
-        while (r < n) {
-            //每次r都往右动
-            sum += nums[r++];
-            //r每动一下，就检查一下l能不能往右动
-            while (sum -nums[l] >= target) {
-                sum -= nums[l++];
+        int r = 0;
+        int windowSum = 0;
+        for (int i = 0; i < n; i++) {
+            while (r < n && windowSum < target) {
+                windowSum += nums[r++];
             }
-            if (sum >= target) {
-                //System.out.println(l + ", " + r);
-                ans = Math.min(ans, r - l);
-            }
+            //while出来两种情况
+            //1 r越界了
+            //2 r不越界但是windowSum >= target
+            //clt ans
+            if (windowSum >= target)
+                ans = Math.min(ans, r - i);
+            //i即将++
+            windowSum -= nums[i];
         }
         return ans == Integer.MAX_VALUE ? 0 : ans;
     }
 
-    public static void main(String[] args) {
-        System.out.println(minSubArrayLen(5, new int[]{1,2,4,5,6}));
-    }
 
 }

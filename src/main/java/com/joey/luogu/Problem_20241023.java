@@ -3,6 +3,7 @@ package com.joey.luogu;
 /**
  * @author pei.liu
  */
+//可信考试20141023第三题
 public class Problem_20241023 {
     //给定一个非负数组arr，一个正数m，求累加和大于m，并且长度在[minLen,maxLen]范围的子数组的个数，子数组必须是连续的一段。
     //1<=arr.length<=10^5, 1<=minLen<maxLen<=arr.length

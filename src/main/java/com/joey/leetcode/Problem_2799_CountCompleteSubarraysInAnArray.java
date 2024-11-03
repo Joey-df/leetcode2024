@@ -30,6 +30,7 @@ public class Problem_2799_CountCompleteSubarraysInAnArray {
 
     //不同元素的数目，就是元素的种类数
     //滑动窗口+set
+    //可以使用992题的思路解这道题
     public static int countCompleteSubarrays(int[] nums) {
         Set<Integer> set = new HashSet<>();
         for (int e : nums) {
@@ -48,8 +49,11 @@ public class Problem_2799_CountCompleteSubarraysInAnArray {
             }
             //r来到初次满足条件的位置，[i,r)是数组的范围
             if (map.size() == kinds) {
-                //i为当前子数组的开始位置，r为初次满足的位置，则i开头，把r及其以后的元素都加上的任意一个子数组都满足
+                //i为当前子数组的开始位置，r 为初次满足的位置，则i开头，把r及其以后的元素都加上的任意一个子数组都满足
                 ans += n - r + 1;
+                // 1 3 4 2 4 2
+                //       3 4 5
+                //       r   n
             }
             //i位置的答案已求完，i即将++，nums[i]出窗口
             map.put(nums[i], map.get(nums[i]) - 1);
