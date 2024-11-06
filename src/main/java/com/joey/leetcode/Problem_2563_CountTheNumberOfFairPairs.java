@@ -1,5 +1,9 @@
 package com.joey.leetcode;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
+
 /**
  * @author pei.liu
  */
@@ -25,7 +29,12 @@ package com.joey.leetcode;
 public class Problem_2563_CountTheNumberOfFairPairs {
 
     public long countFairPairs(int[] nums, int lower, int upper) {
+        TreeMap<Integer, Integer> map = new TreeMap<>();
+
         //TODO
+        //lower <= nums[i] + nums[j] <= upper
+        //lower-nums[i] <= nums[j] <= upper-nums[i]
+        //到每个位置，求小于当前数的key有几个，大于当前key的数有几个？
         return 0;
     }
 

@@ -30,9 +30,68 @@ package com.joey.leetcode;
 //-10^4 <= diff <= 10^4
 public class Problem_2426_NumberOfPairsSatisfyingInequality {
 
-    public long numberOfPairs(int[] nums1, int[] nums2, int diff) {
-        //TODO
-        return 0;
+    //nums1[i] - nums1[j] <= nums2[i] - nums2[j] + diff.
+    //nums1[i] - nums2[i] <= nums1[j] - nums2[j] + diff.
+    //两个数组加工得到arr
+    //变成求arr[i] <= arr[j] + diff
+    //变成到每个位置求 arr[j] >= arr[i] - diff 的数量
+    //到每个位置 如何快速求出 在此之前 小于等于 当前数的个数
+    //=> 归并分治
+    public static int diff;
+
+    public long numberOfPairs(int[] nums1, int[] nums2, int d) {
+        int n = nums1.length;
+        int[] arr = new int[n];
+        for (int i = 0; i < n; i++) {
+            arr[i] = nums1[i] - nums2[i];
+        }
+        diff = d;
+        return fun(arr, 0, n - 1);
+    }
+
+    //返回在arr[l,r]范围上，满足arr[i]-diff <= arr[j]的个数
+    //完事之后数组变有序
+    private long fun(int[] arr, int l, int r) {
+        if (l == r) {
+            return 0;
+        }
+        int m = l + (r - l) / 2;
+        return fun(arr, l, m)
+                + fun(arr, m + 1, r)
+                + merge(arr, l, m, r);
+    }
+
+    //arr[l,m] [m+1,r]已经有序
+    //1. 让数组整体变有序
+    //2. 计算出跨左右产生的数量
+    private long merge(int[] arr, int l, int m, int r) {
+        //统计部分
+        //diff=1
+        //2 5    3  6
+        //
+        long ans = 0;
+        int ri = l;
+        for (int j = m + 1; j <= r; j++) {
+            while (ri <= m && arr[ri] - diff <= arr[j]) {
+                ri++;
+            }
+            ans += ri - l; //累加j位置的答案
+        }
+        //归并排序部分
+        int[] help = new int[r - l + 1];
+        int a = l;
+        int b = m + 1;
+        int ci = 0;
+        while (a <= m && b <= r) {
+            help[ci++] = arr[a] <= arr[b] ? arr[a++] : arr[b++];
+        }
+        while (a <= m) help[ci++] = arr[a++];
+        while (b <= r) help[ci++] = arr[b++];
+        //刷回去
+        for (int i = 0; i < r - l + 1; i++) {
+            arr[i + l] = help[i];
+        }
+        return ans;
     }
 
 }
