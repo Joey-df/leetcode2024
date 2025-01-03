@@ -13,5 +13,49 @@ public class Problem_1371_EvenCountsLongestSubarray {
 		//TODO
 		return 0;
 	}
+	static class Info{
+		int v;
+		int i;
+		public Info(int v, int i) {
+			this.v=v;
+			this.i=i;
+		}
+	}
+	public static int[] twoSum(int[] nums, int target) {
+		int n=nums.length;
+		Info[] infos=new Info[n];
+		for(int i=0;i<n;i++) {
+			infos[i]=new Info(nums[i],i);
+		}
+		Arrays.sort(infos, (a,b)->a.v-b.v);
+
+		for(int i=1;i<n;i++) {
+			int p = find(infos,0,i-1,target-infos[i].v);
+			if(p!=-1) {
+				return new int[]{infos[i].i, p};
+			}
+		}
+		return new int[]{-1,-1};
+	}
+
+	public static int find(Info[] infos, int l, int r, int target) {
+		while(l <= r) {
+			int m=l+(r-l)/2;
+			if(infos[m].v == target) {
+				return infos[m].i;
+			} else if(infos[m].v < target) {
+				l=m+1;
+			} else {
+				r=m-1;
+			}
+		}
+		return -1;
+	}
+
+	public static void main(String[] args) {
+		int[] nums = {0,4,3,0};
+		int t = 0;
+		System.out.println(twoSum(nums, t));
+	}
 
 }

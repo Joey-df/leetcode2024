@@ -12,40 +12,38 @@ import java.util.Arrays;
 //该 最小成本 应该是所用全部连接成本的总和。
 public class Problem_1135_ConnectingCitiesWithMinimumCost {
 
-    static class UnionFind {
-        int[] father;
+    int[] father;
 
-        public UnionFind(int n) {
-            father = new int[n + 1];
-            for (int i = 0; i <= n; i++) { //0 弃而不用
-                father[i] = i;
-            }
-        }
-
-        public int find(int i) {
-            if (father[i] != i) {
-                father[i] = find(father[i]);
-            }
-            return father[i];
-        }
-
-        public void union(int x, int y) {
-            int fx = find(x);
-            int fy = find(y);
-            if (fx != fy) {
-                father[fx] = fy;
-            }
-        }
-
-        public boolean isSameSet(int x, int y) {
-            return find(x) == find(y);
+    public void build(int n) {
+        father = new int[n + 1];
+        for (int i = 0; i <= n; i++) { //0 弃而不用
+            father[i] = i;
         }
     }
 
+    public int find(int i) {
+        if (father[i] != i) {
+            father[i] = find(father[i]);
+        }
+        return father[i];
+    }
+
+    //x y是否可以需要union
+    public boolean union(int x, int y) {
+        int fx = find(x);
+        int fy = find(y);
+        if (fx != fy) {
+            father[fx] = fy;
+            return true;
+        }
+        return false;
+    }
+
+
     public int minimumCost(int n, int[][] connections) {
-        UnionFind uf = new UnionFind(n);
+        build(n);
         int m = connections.length;
-        Arrays.sort(connections, 0, m, (o1, o2) -> o1[2] - o2[2]);
+        Arrays.sort(connections, (o1, o2) -> o1[2] - o2[2]);
         int ans = 0;
         int cnt = 0; //使用边的数量
         for (int i = 0; i < m; i++) {
@@ -53,12 +51,10 @@ public class Problem_1135_ConnectingCitiesWithMinimumCost {
             int from = curr[0];
             int to = curr[1];
             int cost = curr[2];
-            if (uf.isSameSet(from, to)) {
-                continue;
+            if(union(from, to)) {
+                ans += cost;
+                cnt++;
             }
-            uf.union(from, to);
-            ans += cost;
-            cnt++;
         }
         return cnt == n - 1 ? ans : -1;
     }

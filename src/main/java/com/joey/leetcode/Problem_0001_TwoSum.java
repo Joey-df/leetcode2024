@@ -1,5 +1,6 @@
 package com.joey.leetcode;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,4 +28,48 @@ public class Problem_0001_TwoSum {
         }
         return new int[]{-1, -1};
     }
+
+    //杀鸡用牛刀搞一把，练一把二分查找
+    static class Info {
+        int v;
+        int i;
+
+        public Info(int v, int i) {
+            this.v = v;
+            this.i = i;
+        }
+    }
+
+    public static int[] twoSum2(int[] nums, int target) {
+        int n = nums.length;
+        Info[] infos = new Info[n];
+        for (int i = 0; i < n; i++) {
+            infos[i] = new Info(nums[i], i);
+        }
+        Arrays.sort(infos, (a, b) -> a.v - b.v);
+
+        for (int i = 1; i < n; i++) {
+            //两数之和，目标只可能在左边
+            int p = find(infos, 0, i - 1, target - infos[i].v);
+            if (p != -1) {
+                return new int[]{infos[i].i, p};
+            }
+        }
+        return new int[]{-1, -1};
+    }
+
+    public static int find(Info[] infos, int l, int r, int target) {
+        while (l <= r) {
+            int m = l + (r - l) / 2;
+            if (infos[m].v == target) {
+                return infos[m].i;
+            } else if (infos[m].v < target) {
+                l = m + 1;
+            } else {
+                r = m - 1;
+            }
+        }
+        return -1;
+    }
+
 }

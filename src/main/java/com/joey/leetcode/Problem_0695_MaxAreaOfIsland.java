@@ -8,31 +8,34 @@ package com.joey.leetcode;
 //计算并返回 grid 中最大的岛屿面积。如果没有岛屿，则返回面积为 0 。
 //抽象化问题：一个二维数组，里面仅包含0或1，求最多的1连在一起的个数
 public class Problem_0695_MaxAreaOfIsland {
+
+    public static int[] move = {-1, 0, 1, 0, -1};
+
+    //连城一片的1的最大数量
     public static int maxAreaOfIsland(int[][] grid) {
-        int M = grid.length, N = grid[0].length;
+        int n = grid.length;
+        int m = grid[0].length;
         int ans = 0;
-        for (int i = 0; i < M; i++) {
-            for (int j = 0; j < N; j++) {
-                if (grid[i][j] == 1) {
-                    ans = Math.max(ans, fun(i, j, grid, M, N));
-                }
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                ans = Math.max(ans, f(grid, n, m, i, j));
             }
         }
         return ans;
     }
 
-    //计算一个岛的面积
-    //出发点为grid[x][y]==1
-    private static int fun(int x, int y, int[][] grid, int M, int N) {
-        if (x == -1 || x == M || y == -1 || y == N || grid[x][y] != 1) { //越界 或者 不等于1，直接返回0
+    //递归含义：从(x,y)出发连城一片的1是几个
+    public static int f(int[][] grid, int n, int m, int x, int y) {
+        if (x < 0 || x >= n || y < 0 || y >= m || grid[x][y] != 1) {
             return 0;
         }
-        //不越界 并且grid[x][y]==1
         grid[x][y] = 2; //防止走回头路
-        return 1 + fun(x - 1, y, grid, M, N) +
-                fun(x + 1, y, grid, M, N) +
-                fun(x, y - 1, grid, M, N) +
-                fun(x, y + 1, grid, M, N);
+        int ans = 1;
+        for (int i = 0; i < 4; i++) {
+            int nx = x + move[i];
+            int ny = y + move[i + 1];
+            ans += f(grid, n, m, nx, ny);
+        }
+        return ans;
     }
-
 }

@@ -17,40 +17,39 @@ public class Problem_0034_FindFirstAndLastPositionOfElementInSortedArray {
     public int[] searchRange(int[] nums, int target) {
         if (nums == null || nums.length == 0) return new int[]{-1, -1};
         return new int[]{
-                findLeft(nums, target),
-                findRight(nums, target)
+                left(nums, target),
+                right(nums, target)
         };
     }
 
-
-    public int findLeft(int[] arr, int target) {
-        int l = 0, r = arr.length - 1, m;
+    public int left(int[] nums, int target) {
+        int n = nums.length;
+        int l = 0;
+        int r = n - 1;
         int ans = -1;
         while (l <= r) {
-            m = l + ((r - l) >> 1);
-            if (arr[m] > target) {
+            int m = l + (r - l) / 2;
+            if (nums[m] >= target) {
+                if (nums[m]==target) ans = m;
                 r = m - 1;
-            } else if (arr[m] < target) {
-                l = m + 1;
             } else {
-                ans = m;
-                r = m - 1;
+                l = m + 1;
             }
         }
         return ans;
     }
 
-    public int findRight(int[] arr, int target) {
-        int l = 0, r = arr.length - 1, m, ans = -1;
+    public int right(int[] nums, int target) {
+        int n = nums.length;
+        int l = 0, r = n - 1;
+        int ans = -1;
         while (l <= r) {
-            m = l + ((r - l) >> 1);
-            if (arr[m] > target) {
-                r = m - 1;
-            } else if (arr[m] < target) {
+            int m = l + (r - l) / 2;
+            if (nums[m] <= target) {
+                if (nums[m]==target) ans = m;
                 l = m + 1;
             } else {
-                ans = m;
-                l = m + 1;
+                r = m - 1;
             }
         }
         return ans;

@@ -22,34 +22,31 @@ package com.joey.leetcode;
 //输出：3
 public class Problem_0200_NumberOfIslands {
 
-    public int numIslands(char[][] grid) {
-        if (grid == null || grid.length == 0 || grid[0].length == 0) {
-            return 0;
-        }
+    public static int[] move = {-1, 0, 1, 0, -1};
+
+    public static int numIslands(char[][] grid) {
+        int n = grid.length;
+        int m = grid[0].length;
         int ans = 0;
-        for (int i = 0; i < grid.length; i++) {
-            for (int j = 0; j < grid[0].length; j++) {
-                //每次遇到1就计算一个岛，然后去递归的把其上下左右所有的1改为2
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
                 if (grid[i][j] == '1') {
                     ans++;
-                    inflect(grid, i, j);
+                    infect(grid, i, j);
                 }
             }
         }
         return ans;
     }
 
-    //感染函数
-    private void inflect(char[][] grid, int i, int j) {
-        //越界 或者 值 != 1，直接返回
-        if (i < 0 || i == grid.length || j < 0 || j == grid[0].length || grid[i][j] != '1') {
-            return;
-        }
+    public static void infect(char[][] grid, int i, int j) {
         grid[i][j] = '2';
-        //去感染其上下左右
-        inflect(grid, i - 1, j);
-        inflect(grid, i + 1, j);
-        inflect(grid, i, j - 1);
-        inflect(grid, i, j + 1);
+        for (int k = 0; k < 4; k++) {
+            int ni = i + move[k];
+            int nj = j + move[k + 1];
+            if (ni >= 0 && ni < grid.length && nj >= 0 && nj < grid[0].length && grid[ni][nj] == '1') {
+                infect(grid, ni, nj);
+            }
+        }
     }
 }
